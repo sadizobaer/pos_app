@@ -1,0 +1,438 @@
+import 'package:dorkar/config/colors.dart';
+import 'package:dorkar/config/strings.dart';
+import 'package:dorkar/config/text_styles.dart';
+import 'package:dorkar/pages/category_product.dart';
+import 'package:dorkar/pages/category_slider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import '../controller/providers/category_provider.dart';
+import '../widgets/dropdown_selection.dart';
+
+class CategoryPage extends StatelessWidget {
+  CategoryPage({Key? key}) : super(key: key);
+
+  //=============functions===============
+  //-------------------------------------
+
+  ///This function helps to show image icon
+  ImageIcon _showImageIcon(String img, {int size = 20, Color color = white}) {
+    return ImageIcon(
+      AssetImage(img),
+      color: color,
+      size: size.sp,
+    );
+  }
+
+  ///This function refers pop-up-menu-items and contains
+  ///+ __showImageIcon
+  Flexible _dropdownButton({String? initialItem}) {
+    return Flexible(
+      child: Container(
+        height: 30.h,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5.r),
+          color: background,
+        ),
+        child: Row(
+          children: [
+            SizedBox(width: 11.w),
+            Flexible(
+              child: DropdownSelection(initialItem: initialItem),
+            ),
+            SizedBox(width: 8.w),
+          ],
+        ),
+      ),
+    );
+  }
+
+  ///This function indicates the top-bar and contains
+  ///+ __showImageIcon
+  Container _appbar(BuildContext context) {
+    return Container(
+      height:
+          Provider.of<CategoryProvider>(context, listen: true).isSettingsTapped
+              ? 136.h
+              : 92.h,
+      color: primaryRed,
+      child: Column(
+        children: [
+          SizedBox(height: 30.h),
+          Row(
+            children: [
+              SizedBox(width: 17.w),
+              _showImageIcon('assets/icons/scan.png'),
+              const Spacer(),
+              InkWell(
+                onTap: () {
+                  Provider.of<CategoryProvider>(context, listen: false)
+                      .setSettingsTapped(
+                          !Provider.of<CategoryProvider>(context, listen: false)
+                              .isSettingsTapped);
+                },
+                child: Container(
+                  height: 24.h,
+                  width: 24.w,
+                  padding: EdgeInsets.all(5.sp),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Provider.of<CategoryProvider>(context, listen: true)
+                            .isSettingsTapped
+                        ? white.withOpacity(.2)
+                        : white.withOpacity(.0),
+                  ),
+                  child: _showImageIcon('assets/icons/settings.png', size: 20),
+                ),
+              ),
+              SizedBox(width: 12.w),
+              _showImageIcon('assets/icons/notification.png'),
+              SizedBox(width: 12.w),
+              Container(
+                height: 24.h,
+                width: 24.w,
+                padding: EdgeInsets.all(5.5.sp),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: white.withOpacity(.2),
+                ),
+                child: _showImageIcon('assets/icons/search.png', size: 14),
+              ),
+              SizedBox(width: 17.w),
+            ],
+          ),
+          Provider.of<CategoryProvider>(context, listen: true).isSettingsTapped
+              ? SizedBox(height: 6.h)
+              : SizedBox(height: 12.h),
+          Provider.of<CategoryProvider>(context, listen: true).isSettingsTapped
+              ? Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 17.w),
+                  child: Row(
+                    children: [
+                      _dropdownButton(initialItem: 'Warehouse 1'),
+                      SizedBox(width: 6.w),
+                      _dropdownButton(initialItem: 'Yousuf Ali (ask)'),
+                    ],
+                  ),
+                )
+              : Container(),
+          Provider.of<CategoryProvider>(context, listen: true).isSettingsTapped
+              ? SizedBox(height: 6.h)
+              : SizedBox(height: 0.h),
+          Row(
+            children: [
+              SizedBox(width: 17.w),
+              Text(
+                category.toUpperCase(),
+                style: semiBoldText(14.sp, color: white),
+              ),
+              const Spacer(),
+              InkWell(
+                onTap: () {
+                  Provider.of<CategoryProvider>(context, listen: false)
+                      .setSliderCollapsed(
+                          !Provider.of<CategoryProvider>(context, listen: false)
+                              .isSliderCollapsed);
+                },
+                child: Provider.of<CategoryProvider>(context, listen: true)
+                        .isSliderCollapsed
+                    ? _showImageIcon(
+                        'assets/icons/arrow_up.png',
+                        size: 18,
+                      )
+                    : _showImageIcon(
+                        'assets/icons/arrow_down.png',
+                        size: 18,
+                      ),
+              ),
+              SizedBox(width: 22.w),
+            ],
+          ),
+          SizedBox(height: 8.h),
+        ],
+      ),
+    );
+  }
+
+  ///This function refers the title
+  Text _titleText(String title) {
+    return Text(
+      title.toUpperCase(),
+      style: boldText(12.sp),
+    );
+  }
+
+  ///This function indicates bottom item information
+  Row _bottomItemInformation({String? title, String? value}) {
+    return Row(
+      children: [
+        SizedBox(width: 8.w),
+        Text(
+          title!.toUpperCase(),
+          style: boldText(10.sp, color: white),
+        ),
+        const Spacer(),
+        Text(
+          value!,
+          style: boldText(10.sp, color: white),
+        ),
+        SizedBox(width: 8.w),
+      ],
+    );
+  }
+
+  ///This function indicates bottom payment
+  Row _paymentItem(String image, String title) {
+    return Row(
+      children: [
+        SizedBox(width: 8.w),
+        SizedBox(
+          height: 30.h,
+          width: 30.w,
+          child: Image.asset(
+            image,
+            fit: BoxFit.fill,
+          ),
+        ),
+        SizedBox(width: 16.w),
+        Text(
+          title,
+          style: boldText(14.sp),
+        ),
+        const Spacer(),
+      ],
+    );
+  }
+
+  ///This function indicates bottom item and contains
+  ///+ _bottomItemInformation
+  Container _bottomItem(List<String> titles, List<String> values) {
+    return Container(
+      height: 33.h,
+      color: black,
+      child: Row(
+        children: [
+          Flexible(
+            child: _bottomItemInformation(title: titles[0], value: values[0]),
+          ),
+          Container(
+            height: 33.h,
+            width: .4.h,
+            color: white,
+          ),
+          Flexible(
+            child: _bottomItemInformation(title: titles[1], value: values[1]),
+          ),
+          Container(
+            height: 33.h,
+            width: .4.h,
+            color: white,
+          ),
+          Flexible(
+            child: _bottomItemInformation(title: titles[2], value: values[2]),
+          ),
+        ],
+      ),
+    );
+  }
+
+  ///This function refers the main body and contains
+  ///+ _paymentItem
+  ///+ _bottomItemInformation
+  ///+ _products
+  ///+ _titleText
+  ///+ _dropdownButton
+  ///+ _showImageIcon
+  ///+ _bottomItem
+  Container _mainBody(BuildContext context) {
+    int totalQuantity =
+        Provider.of<CategoryProvider>(context, listen: true).getProductsLength;
+    double totalPrice =
+        Provider.of<CategoryProvider>(context, listen: true).getTotalPrice;
+    return Container(
+      decoration: BoxDecoration(
+        color: white,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(
+              Provider.of<CategoryProvider>(context, listen: true)
+                      .isSliderCollapsed
+                  ? 10.r
+                  : 0.r),
+        ),
+      ),
+      child: Column(
+        children: [
+          SizedBox(height: 15.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 17.w),
+            child: Container(
+              height: 30.h,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.r),
+                color: background,
+              ),
+              child: Row(
+                children: [
+                  SizedBox(width: 11.w),
+                  Flexible(
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 4.h),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: searchProduct,
+                          hintStyle: mediumText(10.sp, color: textGrey),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 27.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 17.w),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    _titleText(product),
+                    SizedBox(width: 16.w),
+                    _titleText(name),
+                    SizedBox(width: 44.w),
+                    _titleText(quantity),
+                    SizedBox(width: 33.w),
+                    _titleText(price),
+                  ],
+                ),
+                SizedBox(height: 13.h),
+                Container(height: .4.h, color: textGrey),
+                Provider.of<CategoryProvider>(context, listen: true)
+                            .getProducts
+                            .length ==
+                        0
+                    ? Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8.h),
+                      child: Text(
+                          noProducts,
+                          style: regularText(
+                            14.sp,
+                          ),
+                        ),
+                    )
+                    : Column(
+                        children: List.generate(
+                          Provider.of<CategoryProvider>(context, listen: true)
+                              .getProducts
+                              .length,
+                          (index) => index ==
+                                  Provider.of<CategoryProvider>(context,
+                                              listen: true)
+                                          .getProducts
+                                          .length -
+                                      1
+                              ? CategoryProduct(
+                                  bottomPadding: 17,
+                                  index: index,
+                                  product: Provider.of<CategoryProvider>(
+                                          context,
+                                          listen: true)
+                                      .getProducts[index],
+                                )
+                              : CategoryProduct(
+                                  index: index,
+                                  product: Provider.of<CategoryProvider>(
+                                          context,
+                                          listen: true)
+                                      .getProducts[index],
+                                ),
+                        ),
+                      ),
+              ],
+            ),
+          ),
+          _bottomItem(['item', 'total', 'dis'],
+              ['$totalQuantity', '$totalPrice', '0.0']),
+          Container(height: .4.h, color: white),
+          _bottomItem(['coupon', 'tax', 'shipping'], ['0.0', '0.0', '0.0']),
+          Container(
+            height: 42.h,
+            color: primaryRed,
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 8.w,
+                ),
+                Text(
+                  'Total'.toUpperCase(),
+                  style: boldText(14.sp, color: white),
+                ),
+                const Spacer(),
+                Text(
+                  '$totalPrice TK',
+                  style: boldText(16.sp, color: white),
+                ),
+                SizedBox(
+                  width: 8.w,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 53.h,
+            child: Row(
+              children: [
+                Flexible(
+                  child: _paymentItem('assets/images/cash.png', 'CASH'),
+                ),
+                Container(
+                  height: 53.h,
+                  width: .4.h,
+                  color: background,
+                ),
+                Flexible(
+                  child: _paymentItem('assets/images/bkash.png', 'bKASH'),
+                ),
+                Container(
+                  height: 53.h,
+                  width: .4.h,
+                  color: background,
+                ),
+                Flexible(
+                  child: _paymentItem('assets/images/card.png', 'CARD'),
+                ),
+              ],
+            ),
+          ),
+          Container(height: .4.h, color: background)
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: background,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(92.h),
+        child: _appbar(context),
+      ),
+      body: ListView(
+        shrinkWrap: true,
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(0),
+        children: [
+          Provider.of<CategoryProvider>(context, listen: true).isSliderCollapsed
+              ? CategorySlider()
+              : Container(),
+          Provider.of<CategoryProvider>(context, listen: true).isSliderCollapsed
+              ? SizedBox(height: 12.h)
+              : const SizedBox.shrink(),
+          _mainBody(context),
+        ],
+      ),
+    );
+  }
+}
