@@ -1,16 +1,16 @@
 import 'package:dorkar/config/colors.dart';
 import 'package:dorkar/config/strings.dart';
 import 'package:dorkar/config/text_styles.dart';
-import 'package:dorkar/pages/category_product.dart';
-import 'package:dorkar/pages/category_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import '../controller/providers/category_provider.dart';
-import '../widgets/dropdown_selection.dart';
+import '../../controller/providers/home_provider.dart';
+import '../../widgets/dropdown_selection.dart';
+import 'home_product.dart';
+import 'home_slider.dart';
 
-class CategoryPage extends StatelessWidget {
-  CategoryPage({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   //=============functions===============
   //-------------------------------------
@@ -52,7 +52,7 @@ class CategoryPage extends StatelessWidget {
   Container _appbar(BuildContext context) {
     return Container(
       height:
-          Provider.of<CategoryProvider>(context, listen: true).isSettingsTapped
+          Provider.of<HomeProvider>(context, listen: true).isSettingsTapped
               ? 136.h
               : 92.h,
       color: primaryRed,
@@ -66,9 +66,9 @@ class CategoryPage extends StatelessWidget {
               const Spacer(),
               InkWell(
                 onTap: () {
-                  Provider.of<CategoryProvider>(context, listen: false)
+                  Provider.of<HomeProvider>(context, listen: false)
                       .setSettingsTapped(
-                          !Provider.of<CategoryProvider>(context, listen: false)
+                          !Provider.of<HomeProvider>(context, listen: false)
                               .isSettingsTapped);
                 },
                 child: Container(
@@ -77,7 +77,7 @@ class CategoryPage extends StatelessWidget {
                   padding: EdgeInsets.all(5.sp),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Provider.of<CategoryProvider>(context, listen: true)
+                    color: Provider.of<HomeProvider>(context, listen: true)
                             .isSettingsTapped
                         ? white.withOpacity(.2)
                         : white.withOpacity(.0),
@@ -101,10 +101,10 @@ class CategoryPage extends StatelessWidget {
               SizedBox(width: 17.w),
             ],
           ),
-          Provider.of<CategoryProvider>(context, listen: true).isSettingsTapped
+          Provider.of<HomeProvider>(context, listen: true).isSettingsTapped
               ? SizedBox(height: 6.h)
               : SizedBox(height: 12.h),
-          Provider.of<CategoryProvider>(context, listen: true).isSettingsTapped
+          Provider.of<HomeProvider>(context, listen: true).isSettingsTapped
               ? Padding(
                   padding: EdgeInsets.symmetric(horizontal: 17.w),
                   child: Row(
@@ -116,7 +116,7 @@ class CategoryPage extends StatelessWidget {
                   ),
                 )
               : Container(),
-          Provider.of<CategoryProvider>(context, listen: true).isSettingsTapped
+          Provider.of<HomeProvider>(context, listen: true).isSettingsTapped
               ? SizedBox(height: 6.h)
               : SizedBox(height: 0.h),
           Row(
@@ -129,12 +129,12 @@ class CategoryPage extends StatelessWidget {
               const Spacer(),
               InkWell(
                 onTap: () {
-                  Provider.of<CategoryProvider>(context, listen: false)
+                  Provider.of<HomeProvider>(context, listen: false)
                       .setSliderCollapsed(
-                          !Provider.of<CategoryProvider>(context, listen: false)
+                          !Provider.of<HomeProvider>(context, listen: false)
                               .isSliderCollapsed);
                 },
-                child: Provider.of<CategoryProvider>(context, listen: true)
+                child: Provider.of<HomeProvider>(context, listen: true)
                         .isSliderCollapsed
                     ? _showImageIcon(
                         'assets/icons/arrow_up.png',
@@ -246,15 +246,15 @@ class CategoryPage extends StatelessWidget {
   ///+ _bottomItem
   Container _mainBody(BuildContext context) {
     int totalQuantity =
-        Provider.of<CategoryProvider>(context, listen: true).getProductsLength;
+        Provider.of<HomeProvider>(context, listen: true).getProductsLength;
     double totalPrice =
-        Provider.of<CategoryProvider>(context, listen: true).getTotalPrice;
+        Provider.of<HomeProvider>(context, listen: true).getTotalPrice;
     return Container(
       decoration: BoxDecoration(
         color: white,
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(
-              Provider.of<CategoryProvider>(context, listen: true)
+              Provider.of<HomeProvider>(context, listen: true)
                       .isSliderCollapsed
                   ? 10.r
                   : 0.r),
@@ -308,7 +308,7 @@ class CategoryPage extends StatelessWidget {
                 ),
                 SizedBox(height: 13.h),
                 Container(height: .4.h, color: textGrey),
-                Provider.of<CategoryProvider>(context, listen: true)
+                Provider.of<HomeProvider>(context, listen: true)
                             .getProducts
                             .length ==
                         0
@@ -323,26 +323,26 @@ class CategoryPage extends StatelessWidget {
                     )
                     : Column(
                         children: List.generate(
-                          Provider.of<CategoryProvider>(context, listen: true)
+                          Provider.of<HomeProvider>(context, listen: true)
                               .getProducts
                               .length,
                           (index) => index ==
-                                  Provider.of<CategoryProvider>(context,
+                                  Provider.of<HomeProvider>(context,
                                               listen: true)
                                           .getProducts
                                           .length -
                                       1
-                              ? CategoryProduct(
+                              ? HomeProduct(
                                   bottomPadding: 17,
                                   index: index,
-                                  product: Provider.of<CategoryProvider>(
+                                  product: Provider.of<HomeProvider>(
                                           context,
                                           listen: true)
                                       .getProducts[index],
                                 )
-                              : CategoryProduct(
+                              : HomeProduct(
                                   index: index,
-                                  product: Provider.of<CategoryProvider>(
+                                  product: Provider.of<HomeProvider>(
                                           context,
                                           listen: true)
                                       .getProducts[index],
@@ -424,10 +424,10 @@ class CategoryPage extends StatelessWidget {
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.all(0),
         children: [
-          Provider.of<CategoryProvider>(context, listen: true).isSliderCollapsed
-              ? CategorySlider()
+          Provider.of<HomeProvider>(context, listen: true).isSliderCollapsed
+              ? HomeSlider()
               : Container(),
-          Provider.of<CategoryProvider>(context, listen: true).isSliderCollapsed
+          Provider.of<HomeProvider>(context, listen: true).isSliderCollapsed
               ? SizedBox(height: 12.h)
               : const SizedBox.shrink(),
           _mainBody(context),

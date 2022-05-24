@@ -5,7 +5,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'config/colors.dart';
-import 'controller/providers/category_provider.dart';
+import 'controller/providers/home_provider.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
 
       providers: [
         ChangeNotifierProvider(
-          create: (context) => CategoryProvider(),
+          create: (context) => HomeProvider(),
         ),
       ],
       child: ScreenUtilInit(

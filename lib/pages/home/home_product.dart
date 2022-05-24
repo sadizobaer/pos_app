@@ -1,15 +1,15 @@
-import 'package:dorkar/pages/category_product_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
-import '../config/colors.dart';
-import '../config/text_styles.dart';
 import 'package:provider/provider.dart';
-import '../controller/providers/category_provider.dart';
+import '../../config/colors.dart';
+import '../../config/text_styles.dart';
+import '../../controller/providers/home_provider.dart';
+import 'home_product_model.dart';
 
-class CategoryProduct extends StatelessWidget {
+class HomeProduct extends StatelessWidget {
   final int? bottomPadding, index;
-  final CategoryProductModel product;
-  const CategoryProduct(
+  final HomeProductModel product;
+  const HomeProduct(
       {Key? key, this.bottomPadding = 5, required this.product, this.index})
       : super(key: key);
 
@@ -47,7 +47,7 @@ class CategoryProduct extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () {
-                    Provider.of<CategoryProvider>(context, listen: false)
+                    Provider.of<HomeProvider>(context, listen: false)
                         .updateProductQuantity(
                             index!, product.productQuantity! - 1);
                   },
@@ -69,7 +69,7 @@ class CategoryProduct extends StatelessWidget {
                 SizedBox(width: 10.w),
                 InkWell(
                   onTap: () {
-                    Provider.of<CategoryProvider>(context, listen: false)
+                    Provider.of<HomeProvider>(context, listen: false)
                         .updateProductQuantity(
                             index!, product.productQuantity! + 1);
                   },
@@ -99,7 +99,7 @@ class CategoryProduct extends StatelessWidget {
             SizedBox(width: 10.w),
             InkWell(
               onTap: () {
-                Provider.of<CategoryProvider>(context, listen: false)
+                Provider.of<HomeProvider>(context, listen: false)
                     .deleteProduct(index!);
               },
               child: Container(

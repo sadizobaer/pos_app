@@ -1,14 +1,15 @@
 import 'package:flutter/cupertino.dart';
-import '../../pages/category_product_model.dart';
 
-class CategoryProvider with ChangeNotifier {
+import '../../pages/home/home_product_model.dart';
+
+class HomeProvider with ChangeNotifier {
   bool _sliderCollapsed = true;
   bool _settingsTapped = false;
-  final List<CategoryProductModel> _products = [
-    CategoryProductModel('assets/demo_images/demo0.png', 'Bata Shoe', 2, 120),
-    CategoryProductModel('assets/demo_images/demo1.png', 'Bata Shoe', 2, 100),
-    CategoryProductModel('assets/demo_images/demo2.png', 'Bata Shoe', 2, 80),
-    CategoryProductModel('assets/demo_images/demo3.png', 'Bata Shoe', 2, 300),
+  final List<HomeProductModel> _products = [
+    HomeProductModel('assets/demo_images/demo0.png', 'Bata Shoe', 2, 120),
+    HomeProductModel('assets/demo_images/demo1.png', 'Bata Shoe', 2, 100),
+    HomeProductModel('assets/demo_images/demo2.png', 'Bata Shoe', 2, 80),
+    HomeProductModel('assets/demo_images/demo3.png', 'Bata Shoe', 2, 300),
   ];
 
   get isSliderCollapsed => _sliderCollapsed;
@@ -37,7 +38,7 @@ class CategoryProvider with ChangeNotifier {
   addProduct(
       {String? imageUrl, String? productName, int? quantity, double? price}) {
     _products.add(
-      CategoryProductModel(imageUrl, productName, quantity, price),
+      HomeProductModel(imageUrl, productName, quantity, price),
     );
     notifyListeners();
   }

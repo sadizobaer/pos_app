@@ -1,5 +1,5 @@
 //==============route names==================
 //-------------------------------------------
 
-const String categoryPage = 'categoryPage';
+const String homePage = 'homePage';
 

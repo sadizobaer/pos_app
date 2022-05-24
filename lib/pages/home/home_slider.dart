@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CategorySlider extends StatelessWidget {
-  CategorySlider({Key? key}) : super(key: key);
+class HomeSlider extends StatelessWidget {
+  HomeSlider({Key? key}) : super(key: key);
 
   //=============variables============
   //----------------------------------
@@ -24,8 +24,8 @@ class CategorySlider extends StatelessWidget {
       children: [
         SizedBox(height: 12.h),
         Container(
-          height: 52.h,
-          width: 52.h,
+          height: 50.h,
+          width: 50.h,
           decoration: const BoxDecoration(
             shape: BoxShape.circle,
             color: white,
@@ -48,24 +48,21 @@ class CategorySlider extends StatelessWidget {
   ///This is the slider section contains
   ///+ Several Items
   ///+ Page Indicator
-  Column _slider() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: List.generate(
-            5,
-            (index) => _categoryItem(index),
-          ),
+  Padding _slider(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
+      child: GridView.builder(
+        itemCount: 10,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 5,
+          mainAxisSpacing: 2.h,
+          crossAxisSpacing: 8.w,
+          mainAxisExtent: 80.h,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: List.generate(
-            5,
-            (index) => _categoryItem(index),
-          ),
-        ),
-      ],
+        itemBuilder: (context, index) {
+          return _categoryItem(index);
+        },
+      ),
     );
   }
 
@@ -90,7 +87,7 @@ class CategorySlider extends StatelessWidget {
                 ),
                 itemCount: 4,
                 itemBuilder: (BuildContext context, int index, int realIndex) {
-                  return _slider();
+                  return _slider(context);
                 }),
             Positioned.fill(
               child: Align(

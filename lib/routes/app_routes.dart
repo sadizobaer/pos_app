@@ -1,20 +1,20 @@
 import 'package:dorkar/config/text_styles.dart';
-import 'package:dorkar/pages/category_page.dart';
+import 'package:dorkar/pages/home/home_page.dart';
 import 'package:dorkar/routes/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 final router = GoRouter(
-  initialLocation: '/category',
+  initialLocation: '/home',
     routes: [
       GoRoute(
-          name: categoryPage,
-          path: '/category',
+          name: homePage,
+          path: '/home',
           pageBuilder: (context, state) {
             return MaterialPage(
               key: state.pageKey,
-              child: CategoryPage(),
+              child: HomePage(),
             );
           }),
     ],
