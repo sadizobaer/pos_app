@@ -1,9 +1,12 @@
 import 'package:dorkar/config/colors.dart';
+import 'package:dorkar/config/stateful_wrapper.dart';
 import 'package:dorkar/config/strings.dart';
 import 'package:dorkar/config/text_styles.dart';
+import 'package:dorkar/controller/blocs/home_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../controller/providers/home_provider.dart';
 import '../../widgets/dropdown_selection.dart';
 import 'home_product.dart';
@@ -51,10 +54,9 @@ class HomePage extends StatelessWidget {
   ///+ __showImageIcon
   Container _appbar(BuildContext context) {
     return Container(
-      height:
-          Provider.of<HomeProvider>(context, listen: true).isSettingsTapped
-              ? 136.h
-              : 92.h,
+      height: Provider.of<HomeProvider>(context, listen: true).isSettingsTapped
+          ? 136.h
+          : 92.h,
       color: primaryRed,
       child: Column(
         children: [
@@ -254,8 +256,7 @@ class HomePage extends StatelessWidget {
         color: white,
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(
-              Provider.of<HomeProvider>(context, listen: true)
-                      .isSliderCollapsed
+              Provider.of<HomeProvider>(context, listen: true).isSliderCollapsed
                   ? 10.r
                   : 0.r),
         ),
@@ -313,14 +314,14 @@ class HomePage extends StatelessWidget {
                             .length ==
                         0
                     ? Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.h),
-                      child: Text(
+                        padding: EdgeInsets.symmetric(vertical: 8.h),
+                        child: Text(
                           noProducts,
                           style: regularText(
                             14.sp,
                           ),
                         ),
-                    )
+                      )
                     : Column(
                         children: List.generate(
                           Provider.of<HomeProvider>(context, listen: true)
@@ -335,15 +336,13 @@ class HomePage extends StatelessWidget {
                               ? HomeProduct(
                                   bottomPadding: 17,
                                   index: index,
-                                  product: Provider.of<HomeProvider>(
-                                          context,
+                                  product: Provider.of<HomeProvider>(context,
                                           listen: true)
                                       .getProducts[index],
                                 )
                               : HomeProduct(
                                   index: index,
-                                  product: Provider.of<HomeProvider>(
-                                          context,
+                                  product: Provider.of<HomeProvider>(context,
                                           listen: true)
                                       .getProducts[index],
                                 ),
@@ -413,25 +412,55 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: background,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(92.h),
-        child: _appbar(context),
-      ),
-      body: ListView(
-        shrinkWrap: true,
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(0),
-        children: [
-          Provider.of<HomeProvider>(context, listen: true).isSliderCollapsed
-              ? HomeSlider()
-              : Container(),
-          Provider.of<HomeProvider>(context, listen: true).isSliderCollapsed
-              ? SizedBox(height: 12.h)
-              : const SizedBox.shrink(),
-          _mainBody(context),
-        ],
+    return StatefulWrapper(
+      onInit: () {
+        HomeBloc _homeBloc;
+        _homeBloc = context.read<HomeBloc>();
+        _homeBloc.add(HomeCategoryProductsEvent());
+      },
+      child: Scaffold(
+        backgroundColor: background,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(92.h),
+          child: _appbar(context),
+        ),
+        body: ListView(
+          shrinkWrap: true,
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(0),
+          children: [
+            Provider.of<HomeProvider>(context, listen: true).isSliderCollapsed
+                ? BlocConsumer<HomeBloc, HomeState>(listener: (context, state) {
+                    if (state is HomeConnectionErrorState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('No Internet!'),
+                        ),
+                      );
+                    } else if (state is HomeFailureState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(state.errorString),
+                        ),
+                      );
+                    }
+                  }, builder: (context, state) {
+                    if (state is HomeLoadingState) {
+                      return const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      );
+                    } else if (state is HomeLoadedState) {
+                      return HomeSlider(pageWiseItem: state.pageWiseItem);
+                    }
+                    return Container();
+                  })
+                : Container(),
+            Provider.of<HomeProvider>(context, listen: true).isSliderCollapsed
+                ? SizedBox(height: 12.h)
+                : const SizedBox.shrink(),
+            _mainBody(context),
+          ],
+        ),
       ),
     );
   }

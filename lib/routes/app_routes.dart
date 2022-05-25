@@ -14,7 +14,7 @@ final router = GoRouter(
           pageBuilder: (context, state) {
             return MaterialPage(
               key: state.pageKey,
-              child: HomePage(),
+              child: const HomePage(),
             );
           }),
     ],
