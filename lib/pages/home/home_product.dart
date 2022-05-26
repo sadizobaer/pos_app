@@ -4,11 +4,11 @@ import 'package:provider/provider.dart';
 import '../../config/colors.dart';
 import '../../config/text_styles.dart';
 import '../../controller/providers/home_provider.dart';
-import 'home_product_model.dart';
+import '../../data/models/products_model.dart';
 
 class HomeProduct extends StatelessWidget {
   final int? bottomPadding, index;
-  final HomeProductModel product;
+  final Products product;
   const HomeProduct(
       {Key? key, this.bottomPadding = 5, required this.product, this.index})
       : super(key: key);
@@ -28,28 +28,32 @@ class HomeProduct extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: textGrey),
               ),
-              child: Image.asset(
-                product.productImage!,
-                fit: BoxFit.fill,
-              ),
+              child: product.image == null
+                  ? Image.asset(
+                      'assets/images/default.png',
+                      fit: BoxFit.fill,
+                    )
+                  : Image.network(
+                      product.image,
+                      fit: BoxFit.fill,
+                    ),
             ),
             SizedBox(width: 20.w),
             SizedBox(
               width: 64.w,
               child: Text(
-                product.productName!,
+                product.name,
                 maxLines: 1,
                 style: mediumText(12.sp, color: textGrey),
               ),
             ),
-            SizedBox(width: 20.w),
+            SizedBox(width: 16.w),
             Row(
               children: [
                 InkWell(
                   onTap: () {
                     Provider.of<HomeProvider>(context, listen: false)
-                        .updateProductQuantity(
-                            index!, product.productQuantity! - 1);
+                        .updateProductQuantity(index!, product.quantity - 1);
                   },
                   child: Container(
                     height: 24.h,
@@ -62,16 +66,19 @@ class HomeProduct extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 10.w),
-                Text(
-                  product.productQuantity!.toString(),
-                  style: mediumText(12.sp, color: textGrey),
+                SizedBox(
+                  width: 36.w,
+                  child: Text(
+                    product.quantity.toString(),
+                    textAlign: TextAlign.center,
+                    style: mediumText(12.sp, color: textGrey),
+                  ),
                 ),
                 SizedBox(width: 10.w),
                 InkWell(
                   onTap: () {
                     Provider.of<HomeProvider>(context, listen: false)
-                        .updateProductQuantity(
-                            index!, product.productQuantity! + 1);
+                        .updateProductQuantity(index!, product.quantity + 1);
                   },
                   child: Container(
                     height: 24.h,
@@ -88,15 +95,15 @@ class HomeProduct extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(width: 21.w),
+            SizedBox(width: 16.w),
             SizedBox(
               width: 56.w,
               child: Text(
-                '${product.productPrice!*product.productQuantity!} TK',
+                '${product.price * product.quantity} TK',
                 style: mediumText(12.sp, color: textGrey),
               ),
             ),
-            SizedBox(width: 10.w),
+            const Spacer(),
             InkWell(
               onTap: () {
                 Provider.of<HomeProvider>(context, listen: false)
@@ -116,7 +123,8 @@ class HomeProduct extends StatelessWidget {
                   size: 8.sp,
                 ),
               ),
-            )
+            ),
+            const Spacer(),
           ],
         ),
         SizedBox(height: bottomPadding!.h),

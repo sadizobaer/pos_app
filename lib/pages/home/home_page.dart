@@ -303,7 +303,7 @@ class HomePage extends StatelessWidget {
                     _titleText(name),
                     SizedBox(width: 44.w),
                     _titleText(quantity),
-                    SizedBox(width: 33.w),
+                    SizedBox(width: 40.w),
                     _titleText(price),
                   ],
                 ),
@@ -450,7 +450,12 @@ class HomePage extends StatelessWidget {
                         child: CircularProgressIndicator.adaptive(),
                       );
                     } else if (state is HomeLoadedState) {
-                      return HomeSlider(pageWiseItem: state.pageWiseItem);
+                      //=========products adding from slider page==========
+                      //---------------------------------------------------
+                      return HomeSlider(
+                        pageWiseItem: state.pageWiseItem,
+                        productsModel: state.productsModel,
+                      );
                     }
                     return Container();
                   })

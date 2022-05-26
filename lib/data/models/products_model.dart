@@ -48,7 +48,7 @@ class Products {
     required this.price,
     required this.quantity,
     required this.isInStock,
-    required this.image,
+    this.image,
     required this.specialPrice,
     this.specialStartDate,
     this.specialEndDate,
@@ -62,7 +62,7 @@ class Products {
   int price;
   int quantity;
   bool isInStock;
-  String image;
+  dynamic image;
   int specialPrice;
   dynamic specialStartDate;
   dynamic specialEndDate;
@@ -172,14 +172,14 @@ class Meta {
 
 class Link {
   Link({
-    required this.url,
-    required this.label,
-    required this.active,
+    this.url,
+    this.label,
+    this.active,
   });
 
-  String url;
-  String label;
-  bool active;
+  dynamic url;
+  dynamic label;
+  dynamic active;
 
   factory Link.fromJson(Map<String, dynamic> json) => Link(
         url: json["url"],

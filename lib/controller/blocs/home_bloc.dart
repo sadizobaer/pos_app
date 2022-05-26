@@ -5,6 +5,7 @@ import 'package:dorkar/data/models/products_model.dart';
 import 'package:dorkar/data/services/connectivity_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/cupertino.dart';
 import '../../data/services/home_repository.dart';
 part 'home_event.dart';
 part 'home_state.dart';
@@ -31,6 +32,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       try {
         final response = await repository.getAllCategories();
         final responseProducts = await repository.getAllProducts();
+
         CategoryModel _categoryModel = CategoryModel.fromJson(response.data);
         ProductsModel _productsModel =
             ProductsModel.fromJson(responseProducts.data);
