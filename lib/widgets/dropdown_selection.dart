@@ -37,14 +37,14 @@ class DropdownSelection extends StatelessWidget {
               children: <Widget>[
                 Text(
                   _currentItemSelected ?? initialItem!,
-                  style: mediumText(
-                    10.sp,
+                  style: semiBoldText(
+                    11.sp,
                     color: textGrey,
                   ),
                 ),
                 const ImageIcon(
                   AssetImage('assets/icons/arrow_down.png'),
-                  size: 14,
+                  size: 12,
                   color: textGrey,
                 ),
               ],

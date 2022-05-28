@@ -64,7 +64,15 @@ class HomePage extends StatelessWidget {
           Row(
             children: [
               SizedBox(width: 17.w),
-              _showImageIcon('assets/icons/scan.png'),
+              SizedBox(
+                height: 22.h,
+                width: 108.w,
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  fit: BoxFit.fill,
+                  color: white,
+                ),
+              ),
               const Spacer(),
               InkWell(
                 onTap: () {
@@ -84,22 +92,13 @@ class HomePage extends StatelessWidget {
                         ? white.withOpacity(.2)
                         : white.withOpacity(.0),
                   ),
-                  child: _showImageIcon('assets/icons/settings.png', size: 20),
+                  child: _showImageIcon('assets/icons/settings.png', size: 24),
                 ),
               ),
               SizedBox(width: 12.w),
               _showImageIcon('assets/icons/notification.png'),
               SizedBox(width: 12.w),
-              Container(
-                height: 24.h,
-                width: 24.w,
-                padding: EdgeInsets.all(5.5.sp),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: white.withOpacity(.2),
-                ),
-                child: _showImageIcon('assets/icons/search.png', size: 14),
-              ),
+              _showImageIcon('assets/icons/scan.png', size: 17),
               SizedBox(width: 17.w),
             ],
           ),
@@ -125,10 +124,10 @@ class HomePage extends StatelessWidget {
             children: [
               SizedBox(width: 17.w),
               Text(
-                category.toUpperCase(),
-                style: semiBoldText(14.sp, color: white),
+                quickAdd.toUpperCase(),
+                style: semiBoldText(13.sp, color: white),
               ),
-              const Spacer(),
+              SizedBox(width: 16.w),
               InkWell(
                 onTap: () {
                   Provider.of<HomeProvider>(context, listen: false)
@@ -140,14 +139,38 @@ class HomePage extends StatelessWidget {
                         .isSliderCollapsed
                     ? _showImageIcon(
                         'assets/icons/arrow_up.png',
-                        size: 18,
+                        size: 14,
                       )
                     : _showImageIcon(
                         'assets/icons/arrow_down.png',
-                        size: 18,
+                        size: 14,
                       ),
               ),
-              SizedBox(width: 22.w),
+              const Spacer(),
+              Text(
+                category.toUpperCase(),
+                style: semiBoldText(13.sp, color: white),
+              ),
+              SizedBox(width: 16.w),
+              InkWell(
+                onTap: () {
+                  Provider.of<HomeProvider>(context, listen: false)
+                      .setSliderCollapsed(
+                          !Provider.of<HomeProvider>(context, listen: false)
+                              .isSliderCollapsed);
+                },
+                child: Provider.of<HomeProvider>(context, listen: true)
+                        .isSliderCollapsed
+                    ? _showImageIcon(
+                        'assets/icons/arrow_up.png',
+                        size: 14,
+                      )
+                    : _showImageIcon(
+                        'assets/icons/arrow_down.png',
+                        size: 14,
+                      ),
+              ),
+              SizedBox(width: 17.w),
             ],
           ),
           SizedBox(height: 8.h),
@@ -275,6 +298,12 @@ class HomePage extends StatelessWidget {
               child: Row(
                 children: [
                   SizedBox(width: 11.w),
+                  _showImageIcon(
+                    'assets/icons/search.png',
+                    size: 13,
+                    color: textGrey,
+                  ),
+                  SizedBox(width: 11.w),
                   Flexible(
                     child: Padding(
                       padding: EdgeInsets.only(bottom: 4.h),
@@ -282,7 +311,7 @@ class HomePage extends StatelessWidget {
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: searchProduct,
-                          hintStyle: mediumText(10.sp, color: textGrey),
+                          hintStyle: mediumText(12.sp, color: textGrey),
                         ),
                       ),
                     ),
