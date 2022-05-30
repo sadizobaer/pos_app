@@ -10,12 +10,12 @@ class HomeLoadingState extends HomeState {
 }
 
 class HomeLoadedState extends HomeState{
-  final List<List<CategoryData>> pageWiseItem;
-  final ProductsModel productsModel;
-  const HomeLoadedState(this.pageWiseItem, this.productsModel);
+  final List<List<CategoryData>> pageWiseCategoryItem;
+  final List<List<Products>> pageWiseProductItem;
+  const HomeLoadedState(this.pageWiseCategoryItem, this.pageWiseProductItem);
   @override
   // TODO: implement props
-  List<Object?> get props => [pageWiseItem, productsModel];
+  List<Object?> get props => [pageWiseCategoryItem, pageWiseProductItem];
 }
 
 class HomeConnectionErrorState extends HomeState{

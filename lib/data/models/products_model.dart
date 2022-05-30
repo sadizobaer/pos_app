@@ -47,6 +47,7 @@ class Products {
     required this.sku,
     required this.price,
     required this.quantity,
+    this.maxQuantity = 0,
     required this.isInStock,
     this.image,
     required this.specialPrice,
@@ -61,6 +62,7 @@ class Products {
   String sku;
   int price;
   int quantity;
+  int maxQuantity;
   bool isInStock;
   dynamic image;
   int specialPrice;

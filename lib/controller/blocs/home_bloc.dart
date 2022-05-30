@@ -37,15 +37,29 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         ProductsModel _productsModel =
             ProductsModel.fromJson(responseProducts.data);
         int itemsPerPage = 10;
-        List<List<CategoryData>> itemPerPageList = [];
+        List<List<CategoryData>> categoryPerPageList = [];
+        List<List<Products>> productPerPageList = [];
         for (var i = 0; i < _categoryModel.data!.length; i += itemsPerPage) {
-          itemPerPageList.add(_categoryModel.data!.sublist(
+          categoryPerPageList.add(
+            _categoryModel.data!.sublist(
               i,
               i + itemsPerPage > _categoryModel.data!.length
                   ? _categoryModel.data!.length
-                  : i + itemsPerPage));
+                  : i + itemsPerPage,
+            ),
+          );
         }
-        emit(HomeLoadedState(itemPerPageList, _productsModel));
+        for (var i = 0; i < _productsModel.data!.length; i += itemsPerPage) {
+          productPerPageList.add(
+            _productsModel.data!.sublist(
+              i,
+              i + itemsPerPage > _productsModel.data!.length
+                  ? _productsModel.data!.length
+                  : i + itemsPerPage,
+            ),
+          );
+        }
+        emit(HomeLoadedState(categoryPerPageList, productPerPageList));
       } on DioError catch (e) {
         emit(HomeFailureState(errorString: e.message));
       }

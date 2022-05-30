@@ -13,6 +13,7 @@ class HomeProduct extends StatelessWidget {
       {Key? key, this.bottomPadding = 5, required this.product, this.index})
       : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -52,6 +53,9 @@ class HomeProduct extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () {
+                    product.quantity <= 1 ?
+                    Provider.of<HomeProvider>(context, listen: false)
+                        .updateProductQuantity(index!, product.quantity) :
                     Provider.of<HomeProvider>(context, listen: false)
                         .updateProductQuantity(index!, product.quantity - 1);
                   },
@@ -77,8 +81,11 @@ class HomeProduct extends StatelessWidget {
                 SizedBox(width: 10.w),
                 InkWell(
                   onTap: () {
-                    Provider.of<HomeProvider>(context, listen: false)
-                        .updateProductQuantity(index!, product.quantity + 1);
+                    product.maxQuantity > product.quantity
+                        ? Provider.of<HomeProvider>(context, listen: false)
+                            .updateProductQuantity(index!, product.quantity + 1)
+                        : Provider.of<HomeProvider>(context, listen: false)
+                            .updateProductQuantity(index!, product.quantity);
                   },
                   child: Container(
                     height: 24.h,

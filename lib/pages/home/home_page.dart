@@ -3,6 +3,7 @@ import 'package:dorkar/config/stateful_wrapper.dart';
 import 'package:dorkar/config/strings.dart';
 import 'package:dorkar/config/text_styles.dart';
 import 'package:dorkar/controller/blocs/home_bloc.dart';
+import 'package:dorkar/pages/home/search_product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +14,7 @@ import 'home_product.dart';
 import 'home_slider.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   //=============functions===============
   //-------------------------------------
@@ -123,11 +124,22 @@ class HomePage extends StatelessWidget {
           Row(
             children: [
               SizedBox(width: 17.w),
-              Text(
-                quickAdd.toUpperCase(),
-                style: semiBoldText(13.sp, color: white),
+              InkWell(
+                onTap: () {
+                  Provider.of<HomeProvider>(context, listen: false)
+                      .setSelectedView('QUICK_ADD');
+                },
+                child: Text(
+                  quickAdd.toUpperCase(),
+                  style: semiBoldText(13.sp,
+                      color: Provider.of<HomeProvider>(context, listen: false)
+                                  .getSelectedView ==
+                              "QUICK_ADD"
+                          ? white
+                          : textGrey),
+                ),
               ),
-              SizedBox(width: 16.w),
+              SizedBox(width: 10.w),
               InkWell(
                 onTap: () {
                   Provider.of<HomeProvider>(context, listen: false)
@@ -139,19 +151,40 @@ class HomePage extends StatelessWidget {
                         .isSliderCollapsed
                     ? _showImageIcon(
                         'assets/icons/arrow_up.png',
+                        color: Provider.of<HomeProvider>(context, listen: false)
+                                    .getSelectedView ==
+                                "QUICK_ADD"
+                            ? white
+                            : textGrey,
                         size: 14,
                       )
                     : _showImageIcon(
                         'assets/icons/arrow_down.png',
+                        color: Provider.of<HomeProvider>(context, listen: false)
+                                    .getSelectedView ==
+                                "QUICK_ADD"
+                            ? white
+                            : textGrey,
                         size: 14,
                       ),
               ),
               const Spacer(),
-              Text(
-                category.toUpperCase(),
-                style: semiBoldText(13.sp, color: white),
+              InkWell(
+                onTap: () {
+                  Provider.of<HomeProvider>(context, listen: false)
+                      .setSelectedView("CATEGORY");
+                },
+                child: Text(
+                  category.toUpperCase(),
+                  style: semiBoldText(13.sp,
+                      color: Provider.of<HomeProvider>(context, listen: false)
+                                  .getSelectedView ==
+                              "CATEGORY"
+                          ? white
+                          : textGrey),
+                ),
               ),
-              SizedBox(width: 16.w),
+              SizedBox(width: 10.w),
               InkWell(
                 onTap: () {
                   Provider.of<HomeProvider>(context, listen: false)
@@ -163,10 +196,20 @@ class HomePage extends StatelessWidget {
                         .isSliderCollapsed
                     ? _showImageIcon(
                         'assets/icons/arrow_up.png',
+                        color: Provider.of<HomeProvider>(context, listen: false)
+                                    .getSelectedView ==
+                                "CATEGORY"
+                            ? white
+                            : textGrey,
                         size: 14,
                       )
                     : _showImageIcon(
                         'assets/icons/arrow_down.png',
+                        color: Provider.of<HomeProvider>(context, listen: false)
+                                    .getSelectedView ==
+                                "CATEGORY"
+                            ? white
+                            : textGrey,
                         size: 14,
                       ),
               ),
@@ -284,156 +327,223 @@ class HomePage extends StatelessWidget {
                   : 0.r),
         ),
       ),
-      child: Column(
+      child: Stack(
         children: [
-          SizedBox(height: 15.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 17.w),
-            child: Container(
-              height: 30.h,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.r),
-                color: background,
-              ),
-              child: Row(
-                children: [
-                  SizedBox(width: 11.w),
-                  _showImageIcon(
-                    'assets/icons/search.png',
-                    size: 13,
-                    color: textGrey,
+          Column(
+            children: [
+              SizedBox(height: 15.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 17.w),
+                child: Container(
+                  height: 30.h,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.r),
+                    color: background,
                   ),
-                  SizedBox(width: 11.w),
-                  Flexible(
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 4.h),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: searchProduct,
-                          hintStyle: mediumText(12.sp, color: textGrey),
-                        ),
+                  child: Row(
+                    children: [
+                      SizedBox(width: 11.w),
+                      _showImageIcon(
+                        'assets/icons/search.png',
+                        size: 13,
+                        color: textGrey,
                       ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(height: 27.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 17.w),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    _titleText(product),
-                    SizedBox(width: 16.w),
-                    _titleText(name),
-                    SizedBox(width: 44.w),
-                    _titleText(quantity),
-                    SizedBox(width: 40.w),
-                    _titleText(price),
-                  ],
-                ),
-                SizedBox(height: 13.h),
-                Container(height: .4.h, color: textGrey),
-                Provider.of<HomeProvider>(context, listen: true)
-                            .getProducts
-                            .length ==
-                        0
-                    ? Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.h),
-                        child: Text(
-                          noProducts,
-                          style: regularText(
-                            14.sp,
+                      SizedBox(width: 11.w),
+                      Flexible(
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: 4.h),
+                          child: TextField(
+                            onChanged: (v) {
+                              Provider.of<HomeProvider>(context, listen: false)
+                                  .setSearchText(v);
+                            },
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: searchProduct,
+                              hintStyle: mediumText(12.sp, color: textGrey),
+                            ),
                           ),
                         ),
-                      )
-                    : Column(
-                        children: List.generate(
-                          Provider.of<HomeProvider>(context, listen: true)
-                              .getProducts
-                              .length,
-                          (index) => index ==
-                                  Provider.of<HomeProvider>(context,
-                                              listen: true)
-                                          .getProducts
-                                          .length -
-                                      1
-                              ? HomeProduct(
-                                  bottomPadding: 17,
-                                  index: index,
-                                  product: Provider.of<HomeProvider>(context,
-                                          listen: true)
-                                      .getProducts[index],
-                                )
-                              : HomeProduct(
-                                  index: index,
-                                  product: Provider.of<HomeProvider>(context,
-                                          listen: true)
-                                      .getProducts[index],
-                                ),
-                        ),
                       ),
-              ],
-            ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 27.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 17.w),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        _titleText(product),
+                        SizedBox(width: 16.w),
+                        _titleText(name),
+                        SizedBox(width: 44.w),
+                        _titleText(quantity),
+                        SizedBox(width: 40.w),
+                        _titleText(price),
+                      ],
+                    ),
+                    SizedBox(height: 13.h),
+                    Container(height: .4.h, color: textGrey),
+                    SizedBox(
+                      height: Provider.of<HomeProvider>(context, listen: false)
+                              .isSliderCollapsed
+                          ? 124.h
+                          : 336.h,
+                      child: Provider.of<HomeProvider>(context, listen: true)
+                                  .getProducts
+                                  .length ==
+                              0
+                          ? Center(
+                              child: Text(
+                                addProductMsg,
+                                style: regularText(
+                                  14.sp,
+                                ),
+                              ),
+                            )
+                          : SingleChildScrollView(
+                              child: Column(
+                                children: List.generate(
+                                  Provider.of<HomeProvider>(context,
+                                          listen: true)
+                                      .getProducts
+                                      .length,
+                                  (index) => index ==
+                                          Provider.of<HomeProvider>(context,
+                                                      listen: true)
+                                                  .getProducts
+                                                  .length -
+                                              1
+                                      ? HomeProduct(
+                                          bottomPadding: 17,
+                                          index: index,
+                                          product: Provider.of<HomeProvider>(
+                                                  context,
+                                                  listen: true)
+                                              .getProducts[index],
+                                        )
+                                      : HomeProduct(
+                                          index: index,
+                                          product: Provider.of<HomeProvider>(
+                                                  context,
+                                                  listen: true)
+                                              .getProducts[index],
+                                        ),
+                                ),
+                              ),
+                            ),
+                    ),
+                  ],
+                ),
+              ),
+              _bottomItem(['item', 'total', 'dis'],
+                  ['$totalQuantity', '$totalPrice', '0.0']),
+              Container(height: .4.h, color: white),
+              _bottomItem(['coupon', 'tax', 'shipping'], ['0.0', '0.0', '0.0']),
+              Container(
+                height: 42.h,
+                color: primaryRed,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 8.w,
+                    ),
+                    Text(
+                      'Total'.toUpperCase(),
+                      style: boldText(14.sp, color: white),
+                    ),
+                    const Spacer(),
+                    Text(
+                      '$totalPrice TK',
+                      style: boldText(16.sp, color: white),
+                    ),
+                    SizedBox(
+                      width: 8.w,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 53.h,
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: _paymentItem('assets/images/card.png', 'CARD'),
+                    ),
+                    Container(
+                      height: 53.h,
+                      width: .4.h,
+                      color: background,
+                    ),
+                    Flexible(
+                      child: _paymentItem('assets/images/bkash.png', 'bKASH'),
+                    ),
+                    Container(
+                      height: 53.h,
+                      width: .4.h,
+                      color: background,
+                    ),
+                    Flexible(
+                      child: _paymentItem('assets/images/cash.png', 'CASH'),
+                    ),
+                  ],
+                ),
+              ),
+              Container(height: .4.h, color: background)
+            ],
           ),
-          _bottomItem(['item', 'total', 'dis'],
-              ['$totalQuantity', '$totalPrice', '0.0']),
-          Container(height: .4.h, color: white),
-          _bottomItem(['coupon', 'tax', 'shipping'], ['0.0', '0.0', '0.0']),
-          Container(
-            height: 42.h,
-            color: primaryRed,
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 8.w,
+          Provider.of<HomeProvider>(context, listen: false).getSearchText == ''
+              ? Container()
+              : Positioned(
+                  top: 46.h,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 17.w),
+                    decoration: BoxDecoration(
+                        color: white,
+                        borderRadius: BorderRadius.circular(5.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: textGrey.withOpacity(.4),
+                            offset: const Offset(0, 1),
+                            blurRadius: 1,
+                            spreadRadius: 1,
+                          )
+                        ]),
+                    child: BlocBuilder<HomeBloc, HomeState>(
+                      builder: (context, state) {
+                        if (state is HomeLoadedState) {
+                          return Column(
+                            children: [
+                              SizedBox(
+                                height: Provider.of<HomeProvider>(context,
+                                            listen: false)
+                                        .isSliderCollapsed
+                                    ? 336.h
+                                    : 380.h,
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: List.generate(
+                                      state.pageWiseProductItem[0].length,
+                                      (index) => SearchProduct(
+                                        product: state.pageWiseProductItem[0]
+                                            [index],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return Container();
+                        }
+                      },
+                    ),
+                  ),
                 ),
-                Text(
-                  'Total'.toUpperCase(),
-                  style: boldText(14.sp, color: white),
-                ),
-                const Spacer(),
-                Text(
-                  '$totalPrice TK',
-                  style: boldText(16.sp, color: white),
-                ),
-                SizedBox(
-                  width: 8.w,
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 53.h,
-            child: Row(
-              children: [
-                Flexible(
-                  child: _paymentItem('assets/images/cash.png', 'CASH'),
-                ),
-                Container(
-                  height: 53.h,
-                  width: .4.h,
-                  color: background,
-                ),
-                Flexible(
-                  child: _paymentItem('assets/images/bkash.png', 'bKASH'),
-                ),
-                Container(
-                  height: 53.h,
-                  width: .4.h,
-                  color: background,
-                ),
-                Flexible(
-                  child: _paymentItem('assets/images/card.png', 'CARD'),
-                ),
-              ],
-            ),
-          ),
-          Container(height: .4.h, color: background)
         ],
       ),
     );
@@ -479,11 +589,9 @@ class HomePage extends StatelessWidget {
                         child: CircularProgressIndicator.adaptive(),
                       );
                     } else if (state is HomeLoadedState) {
-                      //=========products adding from slider page==========
-                      //---------------------------------------------------
                       return HomeSlider(
-                        pageWiseItem: state.pageWiseItem,
-                        productsModel: state.productsModel,
+                        pageWiseCategoryItem: state.pageWiseCategoryItem,
+                        pageWiseProductItem: state.pageWiseProductItem,
                       );
                     }
                     return Container();

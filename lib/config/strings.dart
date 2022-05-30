@@ -8,4 +8,4 @@ const name = 'Name';
 const quantity = 'Quantity';
 const price = 'Price';
 const searchProduct = 'Search Product';
-const noProducts = 'no products to show';
+const addProductMsg = 'Add Product!';

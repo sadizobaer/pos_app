@@ -4,10 +4,15 @@ import '../../data/models/products_model.dart';
 class HomeProvider with ChangeNotifier {
   bool _sliderCollapsed = true;
   bool _settingsTapped = false;
-  List<Products> _products = [];
+  String _selectedView = 'QUICK_ADD';
+  String _searchText = '';
+  final List<Products> _products = [];
+
 
   get isSliderCollapsed => _sliderCollapsed;
   get isSettingsTapped => _settingsTapped;
+  get getSelectedView => _selectedView;
+  get getSearchText => _searchText;
   get getProducts => _products;
   get getProductsLength => _products.length;
   get getTotalPrice {
@@ -28,12 +33,30 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  addAllProducts({required List<Products> products}) {
-    List<Products> allProducts = [];
-    for (var item in products) {
-      allProducts.add(item);
-    }
-    _products = allProducts;
+  setSelectedView(String value) {
+    _selectedView = value;
+    notifyListeners();
+  }
+
+  setSearchText(String value) {
+    _searchText = value;
+    notifyListeners();
+  }
+
+  addProduct({required Products product}) {
+    _products.add(Products(
+      id: product.id,
+      image: product.image,
+      datetime: product.datetime,
+      name: product.name,
+      slug: product.slug,
+      sku: product.sku,
+      price: product.price,
+      quantity: 1,
+      maxQuantity: product.quantity,
+      isInStock: product.isInStock,
+      specialPrice: product.specialPrice,
+    ));
     notifyListeners();
   }
 
