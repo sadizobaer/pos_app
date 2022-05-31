@@ -71,6 +71,12 @@ class SearchProduct extends StatelessWidget {
                   .addProduct(product: product);
               Provider.of<HomeProvider>(context, listen: false)
                   .setSearchText('');
+              //===============for hiding keyboard===============
+              //-------------------------------------------------
+              FocusScopeNode currentScope = FocusScope.of(context);
+              if(!currentScope.hasPrimaryFocus && currentScope.hasFocus){
+                FocusManager.instance.primaryFocus?.unfocus();
+              }
             },
             child: const Icon(Icons.add),
           ),

@@ -69,6 +69,10 @@ class HomeSlider extends StatelessWidget {
       onTap: () {
         Provider.of<HomeProvider>(context, listen: false)
             .addProduct(product: productData);
+        FocusScopeNode currentScope = FocusScope.of(context);
+        if(!currentScope.hasPrimaryFocus && currentScope.hasFocus){
+          FocusManager.instance.primaryFocus?.unfocus();
+        }
       },
       child: Column(
         children: [
