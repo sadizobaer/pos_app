@@ -4,14 +4,18 @@ import '../../data/models/products_model.dart';
 class HomeProvider with ChangeNotifier {
   bool _sliderCollapsed = true;
   bool _settingsTapped = false;
+  bool _showBottomItems = false;
   String _selectedView = 'QUICK_ADD';
+  String _categoryItemName = '';
   String _searchText = '';
   final List<Products> _products = [];
 
 
   get isSliderCollapsed => _sliderCollapsed;
   get isSettingsTapped => _settingsTapped;
+  get isShowedBottomItem => _showBottomItems;
   get getSelectedView => _selectedView;
+  get getCategoryItemName => _categoryItemName;
   get getSearchText => _searchText;
   get getProducts => _products;
   get getProductsLength => _products.length;
@@ -23,27 +27,37 @@ class HomeProvider with ChangeNotifier {
     return totalPrice;
   }
 
-  setSliderCollapsed(bool value) {
+  void setSliderCollapsed(bool value) {
     _sliderCollapsed = value;
     notifyListeners();
   }
 
-  setSettingsTapped(bool value) {
+  void setSettingsTapped(bool value) {
     _settingsTapped = value;
     notifyListeners();
   }
 
-  setSelectedView(String value) {
+  void setShowBottomItem(bool value) {
+    _showBottomItems = value;
+    notifyListeners();
+  }
+
+  void setSelectedView(String value) {
     _selectedView = value;
     notifyListeners();
   }
 
-  setSearchText(String value) {
+  void setCategoryItemName(String value) {
+    _categoryItemName = value;
+    notifyListeners();
+  }
+
+  void setSearchText(String value) {
     _searchText = value;
     notifyListeners();
   }
 
-  addProduct({required Products product}) {
+  void addProduct({required Products product}) {
     _products.add(Products(
       id: product.id,
       image: product.image,
@@ -60,12 +74,12 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  deleteProduct(int index) {
+  void deleteProduct(int index) {
     _products.removeAt(index);
     notifyListeners();
   }
 
-  updateProductQuantity(int index, int quantity) {
+  void updateProductQuantity(int index, int quantity) {
     _products[index].quantity = quantity;
     notifyListeners();
   }

@@ -28,36 +28,42 @@ class HomeSlider extends StatelessWidget {
   ///This function indicates categories contains
   ///+ Category Image
   ///+ Category Name
-  Column _categoryItem(CategoryData categoryData) {
-    return Column(
-      children: [
-        SizedBox(height: 12.h),
-        Container(
-          height: 50.h,
-          width: 50.h,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: white,
+  InkWell _categoryItem(CategoryData categoryData, BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Provider.of<HomeProvider>(context, listen: false)
+            .setCategoryItemName(categoryData.slug);
+      },
+      child: Column(
+        children: [
+          SizedBox(height: 12.h),
+          Container(
+            height: 50.h,
+            width: 50.h,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: white,
+            ),
+            padding: EdgeInsets.all(9.sp),
+            child: categoryData.image == null
+                ? Image.asset(
+                    'assets/images/default.png',
+                    fit: BoxFit.fill,
+                  )
+                : Image.network(
+                    categoryData.image,
+                    fit: BoxFit.fill,
+                  ),
           ),
-          padding: EdgeInsets.all(9.sp),
-          child: categoryData.image == null
-              ? Image.asset(
-                  'assets/images/default.png',
-                  fit: BoxFit.fill,
-                )
-              : Image.network(
-                  categoryData.image,
-                  fit: BoxFit.fill,
-                ),
-        ),
-        SizedBox(height: 6.h),
-        Text(
-          categoryData.name,
-          maxLines: 2,
-          textAlign: TextAlign.center,
-          style: semiBoldText(10.sp),
-        ),
-      ],
+          SizedBox(height: 6.h),
+          Text(
+            categoryData.name,
+            maxLines: 2,
+            textAlign: TextAlign.center,
+            style: semiBoldText(10.sp),
+          ),
+        ],
+      ),
     );
   }
 
@@ -69,8 +75,10 @@ class HomeSlider extends StatelessWidget {
       onTap: () {
         Provider.of<HomeProvider>(context, listen: false)
             .addProduct(product: productData);
+        Provider.of<HomeProvider>(context, listen: false)
+            .setCategoryItemName('');
         FocusScopeNode currentScope = FocusScope.of(context);
-        if(!currentScope.hasPrimaryFocus && currentScope.hasFocus){
+        if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
           FocusManager.instance.primaryFocus?.unfocus();
         }
       },
@@ -129,7 +137,7 @@ class HomeSlider extends StatelessWidget {
           return Provider.of<HomeProvider>(context, listen: true)
                       .getSelectedView ==
                   'CATEGORY'
-              ? _categoryItem(pageWiseCategoryItem[_current][index])
+              ? _categoryItem(pageWiseCategoryItem[_current][index], context)
               : _productItem(pageWiseProductItem[_current][index], context);
         },
       ),

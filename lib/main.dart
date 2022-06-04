@@ -1,4 +1,4 @@
-import 'package:dorkar/controller/blocs/home_bloc.dart';
+import 'package:dorkar/controller/blocs/home/home_bloc.dart';
 import 'package:dorkar/data/services/connectivity_repository.dart';
 import 'package:dorkar/data/services/home_repository.dart';
 import 'package:dorkar/routes/app_routes.dart';
@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'config/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'controller/blocs/search/search_bloc.dart';
 import 'controller/providers/home_provider.dart';
 
 void main() {
@@ -52,6 +53,12 @@ class MyApp extends StatelessWidget {
           create: (context) => HomeBloc(
             connectivityRepository: ConnectivityRepository(),
             repository: HomeRepository(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => SearchBloc(
+            connectivityRepository: ConnectivityRepository(),
+            //repository: HomeRepository(),
           ),
         ),
       ],

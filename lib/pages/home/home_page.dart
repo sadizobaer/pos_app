@@ -2,7 +2,8 @@ import 'package:dorkar/config/colors.dart';
 import 'package:dorkar/config/stateful_wrapper.dart';
 import 'package:dorkar/config/strings.dart';
 import 'package:dorkar/config/text_styles.dart';
-import 'package:dorkar/controller/blocs/home_bloc.dart';
+import 'package:dorkar/controller/blocs/home/home_bloc.dart';
+import 'package:dorkar/pages/home/home_footer.dart';
 import 'package:dorkar/pages/home/search_product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,8 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../controller/providers/home_provider.dart';
 import '../../widgets/dropdown_selection.dart';
-import 'home_product.dart';
-import 'home_slider.dart';
+import 'home_body.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -128,6 +128,8 @@ class HomePage extends StatelessWidget {
                 onTap: () {
                   Provider.of<HomeProvider>(context, listen: false)
                       .setSelectedView('QUICK_ADD');
+                  Provider.of<HomeProvider>(context, listen: false)
+                      .setCategoryItemName('');
                 },
                 child: Text(
                   quickAdd.toUpperCase(),
@@ -222,357 +224,79 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  ///This function refers the title
-  Text _titleText(String title) {
-    return Text(
-      title.toUpperCase(),
-      style: boldText(12.sp),
-    );
+  ///This function refers the slider and product part
+  HomeBody _mainBody(BuildContext context) {
+    return const HomeBody();
   }
 
-  ///This function indicates bottom item information
-  Row _bottomItemInformation({String? title, String? value}) {
-    return Row(
-      children: [
-        SizedBox(width: 8.w),
-        Text(
-          title!.toUpperCase(),
-          style: boldText(10.sp, color: white),
-        ),
-        const Spacer(),
-        Text(
-          value!,
-          style: boldText(10.sp, color: white),
-        ),
-        SizedBox(width: 8.w),
-      ],
-    );
-  }
-
-  ///This function indicates bottom payment
-  Row _paymentItem(String image, String title) {
-    return Row(
-      children: [
-        SizedBox(width: 8.w),
-        SizedBox(
-          height: 30.h,
-          width: 30.w,
-          child: Image.asset(
-            image,
-            fit: BoxFit.fill,
-          ),
-        ),
-        SizedBox(width: 16.w),
-        Text(
-          title,
-          style: boldText(14.sp),
-        ),
-        const Spacer(),
-      ],
-    );
-  }
-
-  ///This function indicates bottom item and contains
-  ///+ _bottomItemInformation
-  Container _bottomItem(List<String> titles, List<String> values) {
-    return Container(
-      height: 33.h,
-      color: black,
-      child: Row(
-        children: [
-          Flexible(
-            child: _bottomItemInformation(title: titles[0], value: values[0]),
-          ),
-          Container(
-            height: 33.h,
-            width: .4.h,
-            color: white,
-          ),
-          Flexible(
-            child: _bottomItemInformation(title: titles[1], value: values[1]),
-          ),
-          Container(
-            height: 33.h,
-            width: .4.h,
-            color: white,
-          ),
-          Flexible(
-            child: _bottomItemInformation(title: titles[2], value: values[2]),
-          ),
-        ],
-      ),
-    );
-  }
-
-  ///This function refers the main body and contains
-  ///+ _paymentItem
-  ///+ _bottomItemInformation
-  ///+ _products
-  ///+ _titleText
-  ///+ _dropdownButton
-  ///+ _showImageIcon
-  ///+ _bottomItem
-  _mainBody(BuildContext context) {
-    return CustomScrollView(
-      shrinkWrap: true,
-      physics: const AlwaysScrollableScrollPhysics(),
-      slivers: [
-        SliverToBoxAdapter(
-          child: Column(
-            children: [
-              //===========This portion contains the slider============
-              //-------------------------------------------------------
-              (Provider.of<HomeProvider>(context, listen: true)
-                          .isSliderCollapsed) &&
-                      (Provider.of<HomeProvider>(context, listen: true)
-                              .getSearchText ==
-                          '')
-                  ? BlocConsumer<HomeBloc, HomeState>(
-                      listener: (context, state) {
-                      if (state is HomeConnectionErrorState) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('No Internet!'),
-                          ),
-                        );
-                      } else if (state is HomeFailureState) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(state.errorString),
-                          ),
-                        );
-                      }
-                    }, builder: (context, state) {
-                      if (state is HomeLoadingState) {
-                        return const Center(
-                          child: CircularProgressIndicator.adaptive(),
-                        );
-                      } else if (state is HomeLoadedState) {
-                        return HomeSlider(
-                          pageWiseCategoryItem: state.pageWiseCategoryItem,
-                          pageWiseProductItem: state.pageWiseProductItem,
-                        );
-                      }
-                      return Container();
-                    })
-                  : Container(),
-              Provider.of<HomeProvider>(context, listen: true).isSliderCollapsed
-                  ? SizedBox(height: 12.h)
-                  : const SizedBox.shrink(),
-            ],
-          ),
-        ),
-        SliverAppBar(
-          titleSpacing: 0,
-          backgroundColor: white,
-          elevation: 0,
-          primary: false,
-          pinned: true,
-          title: Container(
-            color: white,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 12.h,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 17.w),
-                  child: Container(
-                    height: 30.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.r),
-                      color: background,
-                    ),
-                    child: Row(
-                      children: [
-                        SizedBox(width: 11.w),
-                        _showImageIcon(
-                          'assets/icons/search.png',
-                          size: 13,
-                          color: textGrey,
-                        ),
-                        SizedBox(width: 11.w),
-                        Flexible(
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: 4.h),
-                            child: TextField(
-                              onChanged: (v) {
-                                Provider.of<HomeProvider>(context,
-                                        listen: false)
-                                    .setSearchText(v);
-                                if (v == '') {
-                                  FocusScopeNode currentScope =
-                                      FocusScope.of(context);
-                                  if (!currentScope.hasPrimaryFocus &&
-                                      currentScope.hasFocus) {
-                                    FocusManager.instance.primaryFocus
-                                        ?.unfocus();
-                                  }
-                                }
-                              },
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: searchProduct,
-                                hintStyle: mediumText(12.sp, color: textGrey),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Container(
-            color: white,
-            child: Column(
-              children: [
-                SizedBox(height: 20.h),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 17.w),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          _titleText(product),
-                          SizedBox(width: 16.w),
-                          _titleText(name),
-                          SizedBox(width: 44.w),
-                          _titleText(quantity),
-                          SizedBox(width: 40.w),
-                          _titleText(price),
-                        ],
-                      ),
-                      SizedBox(height: 13.h),
-                      Container(height: .4.h, color: textGrey),
-                      SizedBox(
-                        child: Provider.of<HomeProvider>(context, listen: true)
-                                    .getProducts
-                                    .length ==
-                                0
-                            ? Center(
-                                child: Text(
-                                  addProductMsg,
-                                  style: regularText(
-                                    14.sp,
-                                  ),
-                                ),
-                              )
-                            : SingleChildScrollView(
-                                child: Column(
-                                  children: List.generate(
-                                    Provider.of<HomeProvider>(context,
-                                            listen: true)
-                                        .getProducts
-                                        .length,
-                                    (index) => index ==
-                                            Provider.of<HomeProvider>(context,
-                                                        listen: true)
-                                                    .getProducts
-                                                    .length -
-                                                1
-                                        ? HomeProduct(
-                                            bottomPadding: 17,
-                                            index: index,
-                                            product: Provider.of<HomeProvider>(
-                                                    context,
-                                                    listen: true)
-                                                .getProducts[index],
-                                          )
-                                        : HomeProduct(
-                                            index: index,
-                                            product: Provider.of<HomeProvider>(
-                                                    context,
-                                                    listen: true)
-                                                .getProducts[index],
-                                          ),
-                                  ),
-                                ),
-                              ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Container _footer(BuildContext context) {
+  ///This function refers the footer part
+  HomeFooter _footer(BuildContext context) {
     int totalQuantity =
         Provider.of<HomeProvider>(context, listen: true).getProductsLength;
     double totalPrice =
         Provider.of<HomeProvider>(context, listen: true).getTotalPrice;
-    return Container(
-      color: white,
-      child: Column(
-        children: [
-          _bottomItem(['item', 'total', 'dis'],
-              ['$totalQuantity', '$totalPrice', '0.0']),
-          Container(height: .4.h, color: white),
-          _bottomItem(['coupon', 'tax', 'shipping'], ['0.0', '0.0', '0.0']),
-          Container(
-            height: 42.h,
-            color: primaryRed,
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 8.w,
+    return HomeFooter(
+      totalPrice: totalPrice,
+      totalQuantity: totalQuantity,
+    );
+  }
+
+  //////This function refers body part
+  Stack _body(BuildContext context) {
+    return Stack(
+      children: [
+        Column(
+          children: [
+            Expanded(child: _mainBody(context)),
+            _footer(context),
+          ],
+        ),
+        Provider.of<HomeProvider>(context, listen: false).getSearchText == ''
+            ? Container()
+            : Positioned(
+                top: Provider.of<HomeProvider>(context, listen: false)
+                        .isSliderCollapsed
+                    ? 56.h
+                    : 44.h,
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 17.w),
+                  decoration: BoxDecoration(
+                      color: white,
+                      borderRadius: BorderRadius.circular(5.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: textGrey.withOpacity(.4),
+                          offset: const Offset(0, 1),
+                          blurRadius: 1,
+                          spreadRadius: 1,
+                        )
+                      ]),
+                  child: BlocBuilder<HomeBloc, HomeState>(
+                    builder: (context, state) {
+                      if (state is HomeLoadedState) {
+                        return Column(
+                          children: [
+                            SingleChildScrollView(
+                              child: Column(
+                                children: List.generate(
+                                  state.pageWiseProductItem[0].length,
+                                  (index) => SearchProduct(
+                                    product: state.pageWiseProductItem[0]
+                                        [index],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      } else {
+                        return Container();
+                      }
+                    },
+                  ),
                 ),
-                Text(
-                  'Total'.toUpperCase(),
-                  style: boldText(14.sp, color: white),
-                ),
-                const Spacer(),
-                Text(
-                  '$totalPrice TK',
-                  style: boldText(16.sp, color: white),
-                ),
-                SizedBox(
-                  width: 8.w,
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 55.h,
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 8.w,
-                ),
-                Flexible(
-                  child: _paymentItem('assets/images/card.png', 'CARD'),
-                ),
-                Container(
-                  height: 53.h,
-                  width: .4.h,
-                  color: background,
-                ),
-                Flexible(
-                  child: _paymentItem('assets/images/bkash.png', 'bKASH'),
-                ),
-                Container(
-                  height: 53.h,
-                  width: .4.h,
-                  color: background,
-                ),
-                Flexible(
-                  child: _paymentItem('assets/images/cash.png', 'CASH'),
-                ),
-              ],
-            ),
-          ),
-          Container(height: .4.h, color: background)
-        ],
-      ),
+              ),
+      ],
     );
   }
 
@@ -586,66 +310,23 @@ class HomePage extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: background,
+        floatingActionButton: FloatingActionButton.small(
+          backgroundColor: black,
+          onPressed: () {
+            Provider.of<HomeProvider>(context, listen: false).setShowBottomItem(
+                !Provider.of<HomeProvider>(context, listen: false)
+                    .isShowedBottomItem);
+          },
+          child: Provider.of<HomeProvider>(context, listen: false)
+                  .isShowedBottomItem
+              ? const Icon(Icons.remove_red_eye)
+              : const Icon(Icons.remove_red_eye_outlined),
+        ),
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(92.h),
           child: _appbar(context),
         ),
-        body: Stack(
-          children: [
-            Column(
-              children: [
-                Expanded(child: _mainBody(context)),
-                _footer(context),
-              ],
-            ),
-            Provider.of<HomeProvider>(context, listen: false).getSearchText ==
-                    ''
-                ? Container()
-                : Positioned(
-                    top: Provider.of<HomeProvider>(context, listen: false)
-                            .isSliderCollapsed
-                        ? 56.h
-                        : 44.h,
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 17.w),
-                      decoration: BoxDecoration(
-                          color: white,
-                          borderRadius: BorderRadius.circular(5.r),
-                          boxShadow: [
-                            BoxShadow(
-                              color: textGrey.withOpacity(.4),
-                              offset: const Offset(0, 1),
-                              blurRadius: 1,
-                              spreadRadius: 1,
-                            )
-                          ]),
-                      child: BlocBuilder<HomeBloc, HomeState>(
-                        builder: (context, state) {
-                          if (state is HomeLoadedState) {
-                            return Column(
-                              children: [
-                                SingleChildScrollView(
-                                  child: Column(
-                                    children: List.generate(
-                                      state.pageWiseProductItem[0].length,
-                                      (index) => SearchProduct(
-                                        product: state.pageWiseProductItem[0]
-                                            [index],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          } else {
-                            return Container();
-                          }
-                        },
-                      ),
-                    ),
-                  ),
-          ],
-        ),
+        body: _body(context),
       ),
     );
   }
