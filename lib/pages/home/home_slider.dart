@@ -1,5 +1,6 @@
 import 'package:dorkar/config/colors.dart';
 import 'package:dorkar/config/text_styles.dart';
+import 'package:dorkar/controller/blocs/category_search/category_search_bloc.dart';
 import 'package:dorkar/data/models/category_model.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -33,6 +34,9 @@ class HomeSlider extends StatelessWidget {
       onTap: () {
         Provider.of<HomeProvider>(context, listen: false)
             .setCategoryItemName(categoryData.slug);
+        context.read<CategorySearchBloc>().add(
+              CategorySearchProductEvent(categoryData.slug),
+            );
       },
       child: Column(
         children: [

@@ -1,7 +1,9 @@
 class ApiUrl{
-  static const String baseApiUrl = 'https://api.dorkar.io/api/en/product';
+  static const String baseApiUrl = 'https://api.dorkar.io/api/en';
 
-  static String getAllCategoriesUrl = '$baseApiUrl/categories';
+  static String getAllCategoriesUrl = '$baseApiUrl/product/categories';
 
-  static String getAllProductsUrl = '$baseApiUrl/products';
+  static String getCategoryProductsUrl = '$baseApiUrl/product/products';
+
+  static String getSearchProductsUrl = '$baseApiUrl/search';
 }

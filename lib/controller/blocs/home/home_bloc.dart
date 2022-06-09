@@ -27,8 +27,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     //==================Event portion==================
     //-------------------------------------------------
     on<HomeCategoryProductsEvent>((event, emit) async {
-
-      if (state is HomeLoadingState || state is HomeLoadedState) {
+      if (state is HomeLoadingState ||
+          state is HomeLoadedState ||
+          state is HomeConnectionErrorState ||
+          state is HomeFailureState) {
+        emit(HomeLoadingState());
         try {
           final response = await repository.getAllCategories();
           final responseProducts = await repository.getAllProducts();
@@ -65,12 +68,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           emit(HomeFailureState(errorString: e.message));
         }
       }
-      // TODO: implement event handler
     });
 
     on<HomeConnectionErrorEvent>((event, emit) {
-      // TODO: implement event handler
-      emit(HomeConnectionErrorState());
+      if (state is HomeLoadingState ||
+          state is HomeLoadedState ||
+          state is HomeConnectionErrorState ||
+          state is HomeFailureState) {
+        emit(HomeConnectionErrorState());
+      }
     });
   }
 }

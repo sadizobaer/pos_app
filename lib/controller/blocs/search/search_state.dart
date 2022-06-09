@@ -9,17 +9,23 @@ class SearchLoadingState extends SearchState {
   List<Object> get props => [];
 }
 
-class SearchConnectionErrorState extends SearchState{
+class SearchLoadedState extends SearchState {
+  final List<Products> products;
+  const SearchLoadedState({required this.products});
+  @override
+  List<Object> get props => [];
+}
+
+class SearchConnectionErrorState extends SearchState {
   @override
   // TODO: implement props
   List<Object?> get props => [];
 }
 
-class SearchFailureState extends SearchState{
+class SearchFailureState extends SearchState {
   final String errorString;
   const SearchFailureState({required this.errorString});
   @override
   // TODO: implement props
   List<Object?> get props => [errorString];
-
 }

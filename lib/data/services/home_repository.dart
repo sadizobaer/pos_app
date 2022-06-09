@@ -4,12 +4,14 @@ import 'package:dorkar/config/api_urls.dart';
 class HomeRepository {
   final Dio _dio = Dio();
 
-  getAllCategories() async{
+  getAllCategories() async {
     final response = await _dio.get(ApiUrl.getAllCategoriesUrl);
     return response;
   }
-  getAllProducts() async{
-    final response = await _dio.get(ApiUrl.getAllProductsUrl);
+
+  getAllProducts() async {
+    final response =
+        await _dio.get("${ApiUrl.getCategoryProductsUrl}?limit=40");
     return response;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:dorkar/controller/blocs/search/search_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -5,10 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../config/colors.dart';
 import '../../config/strings.dart';
 import '../../config/text_styles.dart';
+import '../../controller/blocs/category_search/category_search_bloc.dart';
 import '../../controller/blocs/home/home_bloc.dart';
 import '../../controller/providers/home_provider.dart';
 import 'home_product.dart';
 import 'home_slider.dart';
+import 'home_slider_category_item.dart';
 
 class HomeBody extends StatelessWidget {
   const HomeBody({Key? key}) : super(key: key);
@@ -51,15 +54,42 @@ class HomeBody extends StatelessWidget {
     });
   }
 
-  BlocBuilder<HomeBloc, HomeState> _sliderWithCategoryItem() {
-    return BlocBuilder<HomeBloc, HomeState>(
-        builder: (context, state) {
-      if (state is HomeLoadingState) {
+  BlocConsumer<CategorySearchBloc, CategorySearchState>
+      _sliderWithCategoryItem() {
+    return BlocConsumer<CategorySearchBloc, CategorySearchState>(
+        listener: (context, state) {
+      if (state is CategorySearchConnectionErrorState) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('No Internet!'),
+          ),
+        );
+      } else if (state is CategorySearchFailureState) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(state.errorString),
+          ),
+        );
+      }
+    }, builder: (context, state) {
+      if (state is CategorySearchLoadingState) {
         return const Center(
           child: CircularProgressIndicator.adaptive(),
         );
-      } else if (state is HomeLoadedState) {
-        return const CircularProgressIndicator.adaptive();
+      } else if (state is CategorySearchLoadedState) {
+        return state.productPerPageList.isEmpty
+            ? Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.h),
+                  child: Text(
+                    'No products found!',
+                    style: mediumText(14.sp),
+                  ),
+                ),
+              )
+            : HomeCategoryItemSlider(
+                pageWiseSearchProductItem: state.productPerPageList,
+              );
       }
       return Container();
     });
@@ -127,6 +157,7 @@ class HomeBody extends StatelessWidget {
                               FocusManager.instance.primaryFocus?.unfocus();
                             }
                           }
+                          context.read<SearchBloc>().add(SearchProductEvent(v));
                         },
                         decoration: InputDecoration(
                           border: InputBorder.none,

@@ -7,9 +7,9 @@ import '../../config/text_styles.dart';
 import '../../controller/providers/home_provider.dart';
 import '../../data/models/products_model.dart';
 
-class HomeSlider extends StatelessWidget {
+class HomeCategoryItemSlider extends StatelessWidget {
   final List<List<Products>> pageWiseSearchProductItem;
-  HomeSlider({
+  HomeCategoryItemSlider({
     Key? key,
     required this.pageWiseSearchProductItem,
   }) : super(key: key);
@@ -50,13 +50,13 @@ class HomeSlider extends StatelessWidget {
             padding: EdgeInsets.all(9.sp),
             child: productData.image == null
                 ? Image.asset(
-              'assets/images/default.png',
-              fit: BoxFit.fill,
-            )
+                    'assets/images/default.png',
+                    fit: BoxFit.fill,
+                  )
                 : Image.network(
-              productData.image,
-              fit: BoxFit.fill,
-            ),
+                    productData.image,
+                    fit: BoxFit.fill,
+                  ),
           ),
           SizedBox(height: 6.h),
           Text(
@@ -85,7 +85,10 @@ class HomeSlider extends StatelessWidget {
           mainAxisExtent: 92.h,
         ),
         itemBuilder: (context, index) {
-          return _productItem(pageWiseSearchProductItem[_current][index], context,);
+          return _productItem(
+            pageWiseSearchProductItem[_current][index],
+            context,
+          );
         },
       ),
     );

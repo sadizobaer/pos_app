@@ -1,7 +1,6 @@
 // To parse this JSON data, do
 //
 //     final productsModel = productsModelFromJson(jsonString);
-
 import 'dart:convert';
 
 ProductsModel productsModelFromJson(String str) =>
@@ -141,12 +140,12 @@ class Meta {
   });
 
   int currentPage;
-  int from;
+  dynamic from;
   int lastPage;
   List<Link> links;
   String path;
   int perPage;
-  int to;
+  dynamic to;
   int total;
 
   factory Meta.fromJson(Map<String, dynamic> json) => Meta(

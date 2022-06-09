@@ -6,9 +6,11 @@ import 'package:dorkar/controller/blocs/home/home_bloc.dart';
 import 'package:dorkar/pages/home/home_footer.dart';
 import 'package:dorkar/pages/home/search_product.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../controller/blocs/search/search_bloc.dart';
 import '../../controller/providers/home_provider.dart';
 import '../../widgets/dropdown_selection.dart';
 import 'home_body.dart';
@@ -99,7 +101,19 @@ class HomePage extends StatelessWidget {
               SizedBox(width: 12.w),
               _showImageIcon('assets/icons/notification.png'),
               SizedBox(width: 12.w),
-              _showImageIcon('assets/icons/scan.png', size: 17),
+              InkWell(
+                onTap: () async {
+                  String barcodeScanRes;
+                  barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+                    "#ff6666",
+                    "Cancel",
+                    false,
+                    ScanMode.DEFAULT,
+                  );
+                  print(barcodeScanRes);
+                },
+                child: _showImageIcon('assets/icons/scan.png', size: 17),
+              ),
               SizedBox(width: 17.w),
             ],
           ),
@@ -259,6 +273,7 @@ class HomePage extends StatelessWidget {
                     ? 56.h
                     : 44.h,
                 child: Container(
+                  width: 326.w,
                   margin: EdgeInsets.symmetric(horizontal: 17.w),
                   decoration: BoxDecoration(
                       color: white,
@@ -271,23 +286,51 @@ class HomePage extends StatelessWidget {
                           spreadRadius: 1,
                         )
                       ]),
-                  child: BlocBuilder<HomeBloc, HomeState>(
+                  child: BlocConsumer<SearchBloc, SearchState>(
+                    listener: (context, state) {
+                      if (state is SearchConnectionErrorState) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('No Internet!'),
+                          ),
+                        );
+                      } else if (state is SearchFailureState) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(state.errorString),
+                          ),
+                        );
+                      }
+                    },
                     builder: (context, state) {
-                      if (state is HomeLoadedState) {
-                        return Column(
-                          children: [
-                            SingleChildScrollView(
-                              child: Column(
-                                children: List.generate(
-                                  state.pageWiseProductItem[0].length,
-                                  (index) => SearchProduct(
-                                    product: state.pageWiseProductItem[0]
-                                        [index],
+                      if (state is SearchLoadedState) {
+                        return SingleChildScrollView(
+                          child: state.products.isEmpty
+                              ? Center(
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 16.h),
+                                    child: Text(
+                                      'No products found!',
+                                      style: mediumText(14.sp),
+                                    ),
+                                  ),
+                                )
+                              : Column(
+                                  children: List.generate(
+                                    state.products.length,
+                                    (index) => SearchProduct(
+                                      product: state.products[index],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ],
+                        );
+                      } else if (state is SearchLoadingState) {
+                        return Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.h),
+                            child: const CircularProgressIndicator.adaptive(),
+                          ),
                         );
                       } else {
                         return Container();

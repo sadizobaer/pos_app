@@ -9,8 +9,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'config/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'controller/blocs/category_search/category_search_bloc.dart';
 import 'controller/blocs/search/search_bloc.dart';
 import 'controller/providers/home_provider.dart';
+import 'data/services/search_repository.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -58,6 +60,14 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => SearchBloc(
             connectivityRepository: ConnectivityRepository(),
+            searchRepository: SearchRepository(),
+            //repository: HomeRepository(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => CategorySearchBloc(
+            connectivityRepository: ConnectivityRepository(),
+            searchRepository: SearchRepository(),
             //repository: HomeRepository(),
           ),
         ),
