@@ -106,7 +106,7 @@ class HomeProduct extends StatelessWidget {
             SizedBox(
               width: 56.w,
               child: Text(
-                '${product.price * product.quantity} TK',
+                '${double.parse(product.price) * product.quantity}',
                 style: mediumText(12.sp, color: textGrey),
               ),
             ),

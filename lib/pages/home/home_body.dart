@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:dorkar/config/stateful_wrapper.dart';
 import 'package:dorkar/controller/blocs/search/search_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,7 +16,18 @@ import 'home_slider.dart';
 import 'home_slider_category_item.dart';
 
 class HomeBody extends StatelessWidget {
-  const HomeBody({Key? key}) : super(key: key);
+  HomeBody({Key? key}) : super(key: key);
+
+  Timer? _debounce;
+
+
+  _onSearchChanged(String query, BuildContext context) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      // do something with query
+      context.read<SearchBloc>().add(SearchProductEvent(query));
+    });
+  }
 
   ///This function refers the title
   Text _titleText(String title) {
@@ -157,7 +170,7 @@ class HomeBody extends StatelessWidget {
                               FocusManager.instance.primaryFocus?.unfocus();
                             }
                           }
-                          context.read<SearchBloc>().add(SearchProductEvent(v));
+                          _onSearchChanged(v, context);
                         },
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -200,6 +213,10 @@ class HomeBody extends StatelessWidget {
                 SizedBox(height: 13.h),
                 Container(height: .4.h, color: textGrey),
                 SizedBox(
+                  height: Provider.of<HomeProvider>(context, listen: true)
+                      .getProducts
+                      .length ==
+                      0 ? 200.h : null,
                   child: Provider.of<HomeProvider>(context, listen: true)
                               .getProducts
                               .length ==
@@ -253,25 +270,30 @@ class HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      shrinkWrap: true,
-      physics: const AlwaysScrollableScrollPhysics(),
-      slivers: [
-        SliverToBoxAdapter(
-          child: _sliderPortion(context),
-        ),
-        SliverAppBar(
-          titleSpacing: 0,
-          backgroundColor: white,
-          elevation: 0,
-          primary: false,
-          pinned: true,
-          title: _sliverAppbar(context),
-        ),
-        SliverToBoxAdapter(
-          child: _productPart(context),
-        ),
-      ],
+    return StatefulWrapper(
+      onDispose: (){
+        _debounce?.cancel();
+      },
+      child: CustomScrollView(
+        shrinkWrap: true,
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          SliverToBoxAdapter(
+            child: _sliderPortion(context),
+          ),
+          SliverAppBar(
+            titleSpacing: 0,
+            backgroundColor: white,
+            elevation: 0,
+            primary: false,
+            pinned: true,
+            title: _sliverAppbar(context),
+          ),
+          SliverToBoxAdapter(
+            child: _productPart(context),
+          ),
+        ],
+      ),
     );
   }
 }

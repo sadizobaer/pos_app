@@ -8,10 +8,12 @@ import '../../controller/providers/home_provider.dart';
 class HomeFooter extends StatelessWidget {
   final int totalQuantity;
   final double totalPrice;
+  final double totalDiscount;
   const HomeFooter({
     Key? key,
     required this.totalQuantity,
     required this.totalPrice,
+    required this.totalDiscount,
   }) : super(key: key);
 
   ///This function indicates bottom item and contains
@@ -99,7 +101,7 @@ class HomeFooter extends StatelessWidget {
             children: [
               _bottomItem(
                 ['item', 'total', 'dis'],
-                ['$totalQuantity', '$totalPrice', '0.0'],
+                ['$totalQuantity', '$totalPrice', '$totalDiscount'],
               ),
               Container(
                 height: .4.h,
@@ -125,7 +127,7 @@ class HomeFooter extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  '$totalPrice TK',
+                  '${totalPrice-totalDiscount} TK',
                   style: boldText(16.sp, color: white),
                 ),
                 SizedBox(

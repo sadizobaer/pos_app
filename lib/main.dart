@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      //=========initializer part of bloc and provider===========
+      //=========initializer part of bloc and provider==========
       //--------------------------------------------------------
 
       providers: [

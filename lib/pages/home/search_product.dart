@@ -57,7 +57,7 @@ class SearchProduct extends StatelessWidget {
                   height: 4.h,
                 ),
                 Text(
-                  '${product.price * product.quantity} TK',
+                  '${product.price} TK',
                   style: mediumText(10.sp),
                 ),
               ],

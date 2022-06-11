@@ -59,12 +59,12 @@ class Products {
   String name;
   String slug;
   String sku;
-  int price;
+  dynamic price;
   int quantity;
   int maxQuantity;
   bool isInStock;
   dynamic image;
-  int specialPrice;
+  dynamic specialPrice;
   dynamic specialStartDate;
   dynamic specialEndDate;
 

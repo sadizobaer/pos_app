@@ -22,9 +22,24 @@ class HomeProvider with ChangeNotifier {
   get getTotalPrice {
     double totalPrice = 0;
     for (var element in _products) {
-      totalPrice = totalPrice + element.price * element.quantity;
+      totalPrice = totalPrice + double.parse(element.price) * element.quantity;
     }
     return totalPrice;
+  }
+
+  get getTotalDiscount {
+    double totalDiscount = 0;
+    for(var element in _products){
+      double discountPrice = 0;
+      if(element.specialPrice != 0){
+        discountPrice = element.price - element.specialPrice;
+      }
+      else{
+        discountPrice = 0;
+      }
+      totalDiscount = totalDiscount + discountPrice;
+    }
+    return totalDiscount;
   }
 
   void setSliderCollapsed(bool value) {

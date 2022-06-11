@@ -110,7 +110,12 @@ class HomePage extends StatelessWidget {
                     false,
                     ScanMode.DEFAULT,
                   );
-                  print(barcodeScanRes);
+                  showDialog(context: context, builder: (i){
+                    return SizedBox(
+                      height: 200, width: 200,
+                      child: Center(child: Text(barcodeScanRes),),
+                    );
+                  });
                 },
                 child: _showImageIcon('assets/icons/scan.png', size: 17),
               ),
@@ -240,7 +245,7 @@ class HomePage extends StatelessWidget {
 
   ///This function refers the slider and product part
   HomeBody _mainBody(BuildContext context) {
-    return const HomeBody();
+    return HomeBody();
   }
 
   ///This function refers the footer part
@@ -249,9 +254,12 @@ class HomePage extends StatelessWidget {
         Provider.of<HomeProvider>(context, listen: true).getProductsLength;
     double totalPrice =
         Provider.of<HomeProvider>(context, listen: true).getTotalPrice;
+    double totalDiscount =
+        Provider.of<HomeProvider>(context, listen: true).getTotalDiscount;
     return HomeFooter(
       totalPrice: totalPrice,
       totalQuantity: totalQuantity,
+      totalDiscount: totalDiscount,
     );
   }
 
