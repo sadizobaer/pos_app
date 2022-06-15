@@ -10,8 +10,11 @@ import 'package:provider/provider.dart';
 import 'config/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'controller/blocs/category_search/category_search_bloc.dart';
+import 'controller/blocs/login/login_bloc.dart';
 import 'controller/blocs/search/search_bloc.dart';
 import 'controller/providers/home_provider.dart';
+import 'controller/providers/login_provider.dart';
+import 'data/services/login_repository.dart';
 import 'data/services/search_repository.dart';
 
 void main() {
@@ -51,6 +54,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => HomeProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => LoginProvider(),
+        ),
         BlocProvider(
           create: (context) => HomeBloc(
             connectivityRepository: ConnectivityRepository(),
@@ -68,6 +74,13 @@ class MyApp extends StatelessWidget {
           create: (context) => CategorySearchBloc(
             connectivityRepository: ConnectivityRepository(),
             searchRepository: SearchRepository(),
+            //repository: HomeRepository(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => LoginBloc(
+            connectivityRepository: ConnectivityRepository(),
+            loginRepository: LoginRepository(),
             //repository: HomeRepository(),
           ),
         ),

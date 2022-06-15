@@ -32,7 +32,7 @@ class HomeProvider with ChangeNotifier {
     for(var element in _products){
       double discountPrice = 0;
       if(element.specialPrice != 0){
-        discountPrice = element.price - element.specialPrice;
+        discountPrice = double.parse(element.price) - element.specialPrice;
       }
       else{
         discountPrice = 0;

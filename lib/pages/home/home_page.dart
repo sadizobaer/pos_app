@@ -111,9 +111,11 @@ class HomePage extends StatelessWidget {
                     ScanMode.DEFAULT,
                   );
                   showDialog(context: context, builder: (i){
-                    return SizedBox(
-                      height: 200, width: 200,
-                      child: Center(child: Text(barcodeScanRes),),
+                    return Scaffold(
+                      body: SizedBox(
+                        height: 200, width: 200,
+                        child: Center(child: Text(barcodeScanRes),),
+                      ),
                     );
                   });
                 },
