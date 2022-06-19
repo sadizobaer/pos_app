@@ -18,5 +18,4 @@ class LoginConnectionErrorEvent extends LoginEvent{
   @override
   // TODO: implement props
   List<Object?> get props => [];
-
 }

@@ -16,7 +16,7 @@ import '../../widgets/dropdown_selection.dart';
 import 'home_body.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   //=============functions===============
   //-------------------------------------
@@ -80,6 +80,61 @@ class HomePage extends StatelessWidget {
               InkWell(
                 onTap: () {
                   Provider.of<HomeProvider>(context, listen: false)
+                      .setSwitchToggle(
+                          !Provider.of<HomeProvider>(context, listen: false)
+                              .isSwitched);
+                },
+                child: Stack(
+                  children: [
+                    Container(
+                      height: 16.h,
+                      width: 30.w,
+                      decoration: BoxDecoration(
+                        color: white,
+                        borderRadius: BorderRadius.circular(15.r),
+                      ),
+                    ),
+                    Provider.of<HomeProvider>(context, listen: true).isSwitched
+                        ? Positioned(
+                            left: 0,
+                            child: Container(
+                              height: 16.h,
+                              width: 20.w,
+                              decoration: BoxDecoration(
+                                color: textGrey,
+                                borderRadius: BorderRadius.circular(30.r),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'BN',
+                                  style: boldText(9.sp, color: white),
+                                ),
+                              ),
+                            ),
+                          )
+                        : Positioned(
+                            right: 0,
+                            child: Container(
+                              height: 16.h,
+                              width: 20.w,
+                              decoration: BoxDecoration(
+                                color: black,
+                                borderRadius: BorderRadius.circular(50.r),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'EN',
+                                  style: boldText(9.sp, color: white),
+                                ),
+                              ),
+                            ),
+                          ),
+                  ],
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Provider.of<HomeProvider>(context, listen: false)
                       .setSettingsTapped(
                           !Provider.of<HomeProvider>(context, listen: false)
                               .isSettingsTapped);
@@ -110,14 +165,19 @@ class HomePage extends StatelessWidget {
                     false,
                     ScanMode.DEFAULT,
                   );
-                  showDialog(context: context, builder: (i){
-                    return Scaffold(
-                      body: SizedBox(
-                        height: 200, width: 200,
-                        child: Center(child: Text(barcodeScanRes),),
-                      ),
-                    );
-                  });
+                  showDialog(
+                      context: context,
+                      builder: (i) {
+                        return Scaffold(
+                          body: SizedBox(
+                            height: 200,
+                            width: 200,
+                            child: Center(
+                              child: Text(barcodeScanRes),
+                            ),
+                          ),
+                        );
+                      });
                 },
                 child: _showImageIcon('assets/icons/scan.png', size: 17),
               ),
@@ -153,7 +213,7 @@ class HomePage extends StatelessWidget {
                       .setCategoryItemName('');
                 },
                 child: Text(
-                  quickAdd.toUpperCase(),
+                  EnglishString.quickAdd.toUpperCase(),
                   style: semiBoldText(13.sp,
                       color: Provider.of<HomeProvider>(context, listen: false)
                                   .getSelectedView ==
@@ -198,13 +258,13 @@ class HomePage extends StatelessWidget {
                       .setSelectedView("CATEGORY");
                 },
                 child: Text(
-                  category.toUpperCase(),
+                  EnglishString.category.toUpperCase(),
                   style: semiBoldText(13.sp,
                       color: Provider.of<HomeProvider>(context, listen: false)
                                   .getSelectedView ==
                               "CATEGORY"
                           ? white
-                          : textGrey),
+                          : textGrey,),
                 ),
               ),
               SizedBox(width: 10.w),
@@ -265,7 +325,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  //////This function refers body part
+  ///This function refers body part
   Stack _body(BuildContext context) {
     return Stack(
       children: [
@@ -363,6 +423,7 @@ class HomePage extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: background,
+        resizeToAvoidBottomInset: true,
         floatingActionButton: FloatingActionButton.small(
           backgroundColor: black,
           onPressed: () {
@@ -372,8 +433,8 @@ class HomePage extends StatelessWidget {
           },
           child: Provider.of<HomeProvider>(context, listen: false)
                   .isShowedBottomItem
-              ? const Icon(Icons.remove_red_eye)
-              : const Icon(Icons.remove_red_eye_outlined),
+              ? const Icon(Icons.visibility_off)
+              : const Icon(Icons.remove_red_eye_sharp),
         ),
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(92.h),

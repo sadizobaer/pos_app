@@ -5,6 +5,7 @@ class HomeProvider with ChangeNotifier {
   bool _sliderCollapsed = true;
   bool _settingsTapped = false;
   bool _showBottomItems = false;
+  bool _isSwitched = false;
   String _selectedView = 'QUICK_ADD';
   String _categoryItemName = '';
   String _searchText = '';
@@ -14,6 +15,7 @@ class HomeProvider with ChangeNotifier {
   get isSliderCollapsed => _sliderCollapsed;
   get isSettingsTapped => _settingsTapped;
   get isShowedBottomItem => _showBottomItems;
+  get isSwitched => _isSwitched;
   get getSelectedView => _selectedView;
   get getCategoryItemName => _categoryItemName;
   get getSearchText => _searchText;
@@ -54,6 +56,11 @@ class HomeProvider with ChangeNotifier {
 
   void setShowBottomItem(bool value) {
     _showBottomItems = value;
+    notifyListeners();
+  }
+
+  void setSwitchToggle(bool value) {
+    _isSwitched = value;
     notifyListeners();
   }
 

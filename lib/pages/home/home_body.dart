@@ -20,7 +20,6 @@ class HomeBody extends StatelessWidget {
 
   Timer? _debounce;
 
-
   _onSearchChanged(String query, BuildContext context) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
@@ -157,7 +156,12 @@ class HomeBody extends StatelessWidget {
                   SizedBox(width: 11.w),
                   Flexible(
                     child: Padding(
-                      padding: EdgeInsets.only(bottom: 4.h),
+                      padding: EdgeInsets.only(
+                        bottom: Provider.of<HomeProvider>(context, listen: true)
+                                .isSwitched
+                            ? 0.h
+                            : 4.h,
+                      ),
                       child: TextField(
                         onChanged: (v) {
                           Provider.of<HomeProvider>(context, listen: false)
@@ -174,7 +178,11 @@ class HomeBody extends StatelessWidget {
                         },
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText: searchProduct,
+                          hintText:
+                              Provider.of<HomeProvider>(context, listen: true)
+                                      .isSwitched
+                                  ? BanglaString.searchProduct
+                                  : EnglishString.searchProduct,
                           hintStyle: mediumText(12.sp, color: textGrey),
                         ),
                       ),
@@ -201,29 +209,75 @@ class HomeBody extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    _titleText(product),
-                    SizedBox(width: 16.w),
-                    _titleText(name),
-                    SizedBox(width: 44.w),
-                    _titleText(quantity),
-                    SizedBox(width: 40.w),
-                    _titleText(price),
+                    SizedBox(
+                      width: Provider.of<HomeProvider>(context, listen: true)
+                              .isSwitched
+                          ? 10.w
+                          : 0.w,
+                    ),
+                    _titleText(
+                      Provider.of<HomeProvider>(context, listen: true)
+                              .isSwitched
+                          ? BanglaString.product
+                          : EnglishString.product,
+                    ),
+                    SizedBox(
+                      width: Provider.of<HomeProvider>(context, listen: true)
+                              .isSwitched
+                          ? 40.w
+                          : 16.w,
+                    ),
+                    _titleText(
+                      Provider.of<HomeProvider>(context, listen: true)
+                              .isSwitched
+                          ? BanglaString.name
+                          : EnglishString.name,
+                    ),
+                    SizedBox(
+                      width: Provider.of<HomeProvider>(context, listen: true)
+                              .isSwitched
+                          ? 80.w
+                          : 44.w,
+                    ),
+                    _titleText(
+                      Provider.of<HomeProvider>(context, listen: true)
+                              .isSwitched
+                          ? BanglaString.quantity
+                          : EnglishString.quantity,
+                    ),
+                    SizedBox(
+                      width: Provider.of<HomeProvider>(context, listen: true)
+                              .isSwitched
+                          ? 56.w
+                          : 40.w,
+                    ),
+                    _titleText(
+                      Provider.of<HomeProvider>(context, listen: true)
+                              .isSwitched
+                          ? BanglaString.price
+                          : EnglishString.price,
+                    ),
                   ],
                 ),
                 SizedBox(height: 13.h),
                 Container(height: .4.h, color: textGrey),
                 SizedBox(
                   height: Provider.of<HomeProvider>(context, listen: true)
-                      .getProducts
-                      .length ==
-                      0 ? 200.h : null,
+                              .getProducts
+                              .length ==
+                          0
+                      ? 200.h
+                      : null,
                   child: Provider.of<HomeProvider>(context, listen: true)
                               .getProducts
                               .length ==
                           0
                       ? Center(
                           child: Text(
-                            addProductMsg,
+                            Provider.of<HomeProvider>(context, listen: true)
+                                    .isSwitched
+                                ? BanglaString.addProductMsg
+                                : EnglishString.addProductMsg,
                             style: regularText(
                               14.sp,
                             ),
@@ -271,7 +325,7 @@ class HomeBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StatefulWrapper(
-      onDispose: (){
+      onDispose: () {
         _debounce?.cancel();
       },
       child: CustomScrollView(

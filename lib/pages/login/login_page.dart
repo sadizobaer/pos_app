@@ -7,44 +7,46 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import '../../config/colors.dart';
 import '../../controller/blocs/login/login_bloc.dart';
+import '../../controller/providers/home_provider.dart';
 import '../../controller/providers/login_provider.dart';
 import '../../routes/route_names.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
 
-  final TextEditingController _emailController =
-      TextEditingController(text: "");
-  final TextEditingController _passwordController =
-      TextEditingController(text: "");
+  static final TextEditingController password = TextEditingController();
+  static final TextEditingController email = TextEditingController();
 
-  Container _textField(
-      TextEditingController controller, String hint, IconData iconData) {
-    return Container(
-      height: 38.h,
-      margin: EdgeInsets.only(right: 20.w),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6.r),
-        border: Border.all(color: textGrey, width: .6),
-      ),
-      child: Row(
-        children: [
-          SizedBox(width: 8.w),
-          Icon(iconData),
-          SizedBox(width: 8.w),
-          Flexible(
-            child: TextField(
-              controller: controller,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: hint,
-                hintStyle: regularText(15.sp, color: textGrey),
+  _textField(TextEditingController controller, String hint, IconData iconData,
+      {bool isPassword = false}) {
+    return StatefulBuilder(builder: (context, setState) {
+      return Container(
+        height: 38.h,
+        margin: EdgeInsets.only(right: 20.w),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6.r),
+          border: Border.all(color: textGrey, width: .6),
+        ),
+        child: Row(
+          children: [
+            SizedBox(width: 8.w),
+            Icon(iconData),
+            SizedBox(width: 8.w),
+            Flexible(
+              child: TextField(
+                controller: controller,
+                obscureText: isPassword,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: hint,
+                  hintStyle: regularText(15.sp, color: textGrey),
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   @override
@@ -68,7 +70,10 @@ class LoginPage extends StatelessWidget {
             ),
             SizedBox(height: 24.h),
             Text(
-              loginText,
+              Provider.of<HomeProvider>(context, listen: true)
+                  .isSwitched
+                  ? BanglaString.loginText
+                  : EnglishString.loginText,
               style: TextStyle(
                 fontSize: 22.sp,
                 color: textGrey,
@@ -79,7 +84,10 @@ class LoginPage extends StatelessWidget {
               height: 4.h,
             ),
             Text(
-              login,
+              Provider.of<HomeProvider>(context, listen: true)
+                  .isSwitched
+                  ? BanglaString.login
+                  : EnglishString.login,
               style: TextStyle(
                 fontSize: 34.sp,
                 fontWeight: FontWeight.w900,
@@ -88,22 +96,29 @@ class LoginPage extends StatelessWidget {
             SizedBox(
               height: 24.h,
             ),
-            _textField(_emailController, "Email or Phone", Icons.lock),
+            _textField(email, "Email or Phone", Icons.email_outlined),
             SizedBox(height: 12.h),
-            _textField(_passwordController, "Password", Icons.person),
+            _textField(password, "Password", Icons.lock, isPassword: true),
             SizedBox(height: 20.h),
             InkWell(
               onTap: () {
-                if (_emailController.text == "" ||
-                    _passwordController.text == "") {
+                FocusScopeNode currentScope = FocusScope.of(context);
+                if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                }
+                if (password.text == "" || email.text == "") {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text("All fields are required"),
                     ),
                   );
                 } else {
-                  context.read<LoginBloc>().add(LoginWithEmailAndPassword(
-                      _emailController.text, _passwordController.text));
+                  context.read<LoginBloc>().add(
+                        LoginWithEmailAndPassword(
+                          email.text,
+                          password.text,
+                        ),
+                      );
                   Provider.of<LoginProvider>(context, listen: false)
                       .setAuthenticating(true);
                 }
@@ -122,7 +137,10 @@ class LoginPage extends StatelessWidget {
                           backgroundColor: white,
                         )
                       : Text(
-                          login,
+                    Provider.of<HomeProvider>(context, listen: true)
+                        .isSwitched
+                        ? BanglaString.login
+                        : EnglishString.login,
                           style: semiBoldText(16.sp, color: white),
                         ),
                 ),
@@ -132,7 +150,10 @@ class LoginPage extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: Text(
-                forgetPassword,
+                Provider.of<HomeProvider>(context, listen: true)
+                    .isSwitched
+                    ? BanglaString.forgetPassword
+                    : EnglishString.forgetPassword,
                 style: semiBoldText(14.w, color: textGrey),
               ),
             ),
@@ -143,11 +164,11 @@ class LoginPage extends StatelessWidget {
                       .setAuthenticating(false);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Something went wrong!'),
+                      content: Text('Given credentials are incorrect!'),
                     ),
                   );
                 }
-                if(state is LoginLoaded){
+                if (state is LoginLoaded) {
                   Provider.of<LoginProvider>(context, listen: false)
                       .setAuthenticating(false);
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -157,7 +178,7 @@ class LoginPage extends StatelessWidget {
                   );
                   context.goNamed(homePage);
                 }
-                if(state is LoginConnectionError){
+                if (state is LoginConnectionError) {
                   Provider.of<LoginProvider>(context, listen: false)
                       .setAuthenticating(false);
                   ScaffoldMessenger.of(context).showSnackBar(

@@ -96,23 +96,24 @@ class HomeFooter extends StatelessWidget {
       color: white,
       child: Column(
         children: [
-          Provider.of<HomeProvider>(context, listen: false)
-              .isShowedBottomItem ? Column(
-            children: [
-              _bottomItem(
-                ['item', 'total', 'dis'],
-                ['$totalQuantity', '$totalPrice', '$totalDiscount'],
-              ),
-              Container(
-                height: .4.h,
-                color: white,
-              ),
-              _bottomItem(
-                ['coupon', 'tax', 'shipping'],
-                ['0.0', '0.0', '0.0'],
-              ),
-            ],
-          ) : Container(),
+          Provider.of<HomeProvider>(context, listen: false).isShowedBottomItem
+              ? Column(
+                  children: [
+                    _bottomItem(
+                      ['item', 'total', 'dis'],
+                      ['$totalQuantity', '$totalPrice', '$totalDiscount'],
+                    ),
+                    Container(
+                      height: .4.h,
+                      color: white,
+                    ),
+                    _bottomItem(
+                      ['coupon', 'tax', 'shipping'],
+                      ['0.0', '0.0', '0.0'],
+                    ),
+                  ],
+                )
+              : Container(),
           Container(
             height: 42.h,
             color: primaryRed,
@@ -127,7 +128,7 @@ class HomeFooter extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  '${totalPrice-totalDiscount} TK',
+                  '${totalPrice - totalDiscount} TK',
                   style: boldText(16.sp, color: white),
                 ),
                 SizedBox(
