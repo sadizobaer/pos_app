@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'config/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'config/navigation_service.dart';
 import 'controller/blocs/category_search/category_search_bloc.dart';
 import 'controller/blocs/login/login_bloc.dart';
 import 'controller/blocs/search/search_bloc.dart';
@@ -111,6 +112,7 @@ class _DorkarState extends State<Dorkar> {
     //-------------------------------------------------
 
     return MaterialApp.router(
+      key: NavigationService.navigatorKey,
       routeInformationParser: router.routeInformationParser,
       routerDelegate: router.routerDelegate,
       debugShowCheckedModeBanner: false,

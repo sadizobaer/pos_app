@@ -10,6 +10,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../config/language_controller.dart';
 import '../../controller/blocs/search/search_bloc.dart';
 import '../../controller/providers/home_provider.dart';
 import '../../widgets/dropdown_selection.dart';
@@ -132,6 +133,7 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ),
+              SizedBox(width: 8.w),
               InkWell(
                 onTap: () {
                   Provider.of<HomeProvider>(context, listen: false)
@@ -213,7 +215,7 @@ class HomePage extends StatelessWidget {
                       .setCategoryItemName('');
                 },
                 child: Text(
-                  EnglishString.quickAdd.toUpperCase(),
+                    LanguageController.quickAdd().toUpperCase(),
                   style: semiBoldText(13.sp,
                       color: Provider.of<HomeProvider>(context, listen: false)
                                   .getSelectedView ==
@@ -258,7 +260,7 @@ class HomePage extends StatelessWidget {
                       .setSelectedView("CATEGORY");
                 },
                 child: Text(
-                  EnglishString.category.toUpperCase(),
+                  LanguageController.category().toUpperCase(),
                   style: semiBoldText(13.sp,
                       color: Provider.of<HomeProvider>(context, listen: false)
                                   .getSelectedView ==
@@ -381,7 +383,7 @@ class HomePage extends StatelessWidget {
                                     padding:
                                         EdgeInsets.symmetric(vertical: 16.h),
                                     child: Text(
-                                      'No products found!',
+                                      LanguageController.noProductMsg(),
                                       style: mediumText(14.sp),
                                     ),
                                   ),

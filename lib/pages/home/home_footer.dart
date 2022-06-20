@@ -1,3 +1,4 @@
+import 'package:dorkar/config/language_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -123,12 +124,13 @@ class HomeFooter extends StatelessWidget {
                   width: 8.w,
                 ),
                 Text(
-                  'Total'.toUpperCase(),
+                  LanguageController.total().toUpperCase(),
                   style: boldText(14.sp, color: white),
                 ),
                 const Spacer(),
                 Text(
-                  '${totalPrice - totalDiscount} TK',
+                  '${totalPrice - totalDiscount}' '  ' +
+                      LanguageController.taka().toUpperCase(),
                   style: boldText(16.sp, color: white),
                 ),
                 SizedBox(
@@ -145,7 +147,10 @@ class HomeFooter extends StatelessWidget {
                   width: 8.w,
                 ),
                 Flexible(
-                  child: _paymentItem('assets/images/card.png', 'CARD'),
+                  child: _paymentItem(
+                    'assets/images/card.png',
+                    LanguageController.card(),
+                  ),
                 ),
                 Container(
                   height: 53.h,
@@ -153,7 +158,10 @@ class HomeFooter extends StatelessWidget {
                   color: background,
                 ),
                 Flexible(
-                  child: _paymentItem('assets/images/bkash.png', 'bKASH'),
+                  child: _paymentItem(
+                    'assets/images/bkash.png',
+                    LanguageController.bkash(),
+                  ),
                 ),
                 Container(
                   height: 53.h,
@@ -161,7 +169,10 @@ class HomeFooter extends StatelessWidget {
                   color: background,
                 ),
                 Flexible(
-                  child: _paymentItem('assets/images/cash.png', 'CASH'),
+                  child: _paymentItem(
+                    'assets/images/cash.png',
+                    LanguageController.cash(),
+                  ),
                 ),
               ],
             ),

@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../config/colors.dart';
-import '../../config/strings.dart';
+import '../../config/language_controller.dart';
 import '../../config/text_styles.dart';
 import '../../controller/blocs/category_search/category_search_bloc.dart';
 import '../../controller/blocs/home/home_bloc.dart';
@@ -94,7 +94,7 @@ class HomeBody extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 16.h),
                   child: Text(
-                    'No products found!',
+                    LanguageController.noProductMsg(),
                     style: mediumText(14.sp),
                   ),
                 ),
@@ -178,11 +178,7 @@ class HomeBody extends StatelessWidget {
                         },
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText:
-                              Provider.of<HomeProvider>(context, listen: true)
-                                      .isSwitched
-                                  ? BanglaString.searchProduct
-                                  : EnglishString.searchProduct,
+                          hintText: LanguageController.searchProduct(),
                           hintStyle: mediumText(12.sp, color: textGrey),
                         ),
                       ),
@@ -210,52 +206,28 @@ class HomeBody extends StatelessWidget {
                 Row(
                   children: [
                     SizedBox(
-                      width: Provider.of<HomeProvider>(context, listen: true)
-                              .isSwitched
-                          ? 10.w
-                          : 0.w,
+                      width: LanguageController.isBangla() ? 10.w : 0.w,
                     ),
                     _titleText(
-                      Provider.of<HomeProvider>(context, listen: true)
-                              .isSwitched
-                          ? BanglaString.product
-                          : EnglishString.product,
+                      LanguageController.product(),
                     ),
                     SizedBox(
-                      width: Provider.of<HomeProvider>(context, listen: true)
-                              .isSwitched
-                          ? 40.w
-                          : 16.w,
+                      width: LanguageController.isBangla() ? 40.w : 16.w,
                     ),
                     _titleText(
-                      Provider.of<HomeProvider>(context, listen: true)
-                              .isSwitched
-                          ? BanglaString.name
-                          : EnglishString.name,
+                      LanguageController.name(),
                     ),
                     SizedBox(
-                      width: Provider.of<HomeProvider>(context, listen: true)
-                              .isSwitched
-                          ? 80.w
-                          : 44.w,
+                      width: LanguageController.isBangla() ? 80.w : 44.w,
                     ),
                     _titleText(
-                      Provider.of<HomeProvider>(context, listen: true)
-                              .isSwitched
-                          ? BanglaString.quantity
-                          : EnglishString.quantity,
+                      LanguageController.quantity(),
                     ),
                     SizedBox(
-                      width: Provider.of<HomeProvider>(context, listen: true)
-                              .isSwitched
-                          ? 56.w
-                          : 40.w,
+                      width: LanguageController.isBangla() ? 56.w : 40.w,
                     ),
                     _titleText(
-                      Provider.of<HomeProvider>(context, listen: true)
-                              .isSwitched
-                          ? BanglaString.price
-                          : EnglishString.price,
+                      LanguageController.price(),
                     ),
                   ],
                 ),
@@ -274,13 +246,8 @@ class HomeBody extends StatelessWidget {
                           0
                       ? Center(
                           child: Text(
-                            Provider.of<HomeProvider>(context, listen: true)
-                                    .isSwitched
-                                ? BanglaString.addProductMsg
-                                : EnglishString.addProductMsg,
-                            style: regularText(
-                              14.sp,
-                            ),
+                            LanguageController.addProductMsg(),
+                            style: regularText(14.sp),
                           ),
                         )
                       : SingleChildScrollView(
