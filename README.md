@@ -1,4 +1,4 @@
-# dorkar
+# Pos App
 
 A new Flutter project.
 
